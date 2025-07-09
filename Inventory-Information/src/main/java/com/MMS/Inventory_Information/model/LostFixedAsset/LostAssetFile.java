@@ -1,4 +1,4 @@
-package com.MMS.Inventory_Information.model;
+package com.MMS.Inventory_Information.model.LostFixedAsset;
 
 import jakarta.persistence.*;
 import lombok.*;
