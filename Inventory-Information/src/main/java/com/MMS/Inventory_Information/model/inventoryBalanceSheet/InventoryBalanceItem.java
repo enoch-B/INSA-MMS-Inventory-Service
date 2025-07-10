@@ -3,20 +3,22 @@ package com.MMS.Inventory_Information.model.inventoryBalanceSheet;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Entity
 @Data
 @Table(name = "inventory_balance_items")
 public class InventoryBalanceItem {
 
         @Id
-        @GeneratedValue
-        private Long id;
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        private UUID id;
 
-        private String itemId;       // Reference to Item from item-service
+        private UUID itemId;       // Reference to Item from item-service
 
-        private String itemCode;
-        private String itemName;
-        private String unitMeasure;
+//        private String itemCode;
+//        private String itemName;
+//        private String unitMeasure; // Optional snapshots from item-service
 
         private Integer quantity;
 

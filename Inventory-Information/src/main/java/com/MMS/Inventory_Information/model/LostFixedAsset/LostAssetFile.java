@@ -3,6 +3,8 @@ package com.MMS.Inventory_Information.model.LostFixedAsset;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "lost_asset_files")
 @Getter
@@ -14,7 +16,7 @@ public class LostAssetFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID  id;
 
     private String filename;
     private String fileUrl;

@@ -3,6 +3,7 @@ package com.MMS.Inventory_Information.model.LostStockItem;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 public class LostStockItemDetail {
@@ -15,7 +16,7 @@ public class LostStockItemDetail {
     @JoinColumn(name = "lost_stock_item_id")
     private LostStockItem lostStockItem;
 
-    private Long itemId;        // FK to item-service
+    private UUID itemsId;        // FK to item-service
 
     // Snapshot fields (optional but recommended for audit)
     private String itemName;

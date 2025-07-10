@@ -23,25 +23,26 @@ public class InventoryBalance {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private UUID id;
 
-        @Column(nullable = false,unique = true)
+
         private UUID tenantId;
 
-        private Long preparedById; // FK to employee-service
+        private UUID preparedById; // FK to employee-service
         // FK to Count Sheet
         @ManyToOne
         @JoinColumn(name = "inventory_count_id", nullable = false)
         private InventoryCount inventoryCount;
 
-        private LocalDate budgetYear;
+        @Column(nullable = false)
+        private String budgetYear;
 
-
+       @Enumerated(EnumType.STRING)
         private StoreType storeType;
 
 
-        private String preparedBy;  // Snapshot of user ID
+//        private String preparedBy;  // optional Snapshot of user ID
         private LocalDate preparedOn;
 
-        @OneToMany(mappedBy = "inventoryBalance", cascade = CascadeType.ALL)
+        @OneToMany(mappedBy = "inventoryBalance", cascade = CascadeType.ALL, orphanRemoval = true)
         private List<InventoryBalanceItem> items;
 
 

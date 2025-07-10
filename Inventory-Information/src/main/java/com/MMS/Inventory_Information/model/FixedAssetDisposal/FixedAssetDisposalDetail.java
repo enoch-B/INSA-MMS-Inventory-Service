@@ -15,17 +15,19 @@ public class FixedAssetDisposalDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
-    private UUID itemsId; // from asset-service
+    private UUID itemId; // from asset-service
 
     private UUID fixedAssetId; // from fixed-asset-service
+    private UUID tagId; // from fixed-asset-service
+    private UUID gainLossValueId;
+    private UUID sellingPrice;
+
+    private String accountCode; // snapshot from fixed asset service
+    private String BookValue; // snapshot from fixed asset service
 
     @Column(nullable = false)
     private String itemLocation;
 
-    @Column(nullable = false)
-    private BigDecimal sellingPrice;
-    @Column(nullable = false)
-    private BigDecimal gainLossValue;
 
     @Column(nullable = false)
     private String disposalMethod; // e.g., "Sale", "Donation", "Scrap"

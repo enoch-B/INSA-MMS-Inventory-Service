@@ -18,8 +18,8 @@ public class LostFixedAsset {
 
 
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        private UUID id;
 
         @Column(nullable = false)
         private UUID tenantId;
@@ -27,11 +27,16 @@ public class LostFixedAsset {
         @Column(nullable = false, unique = true)
         private String lostItemNo;
 
-        private Long storeId;        // from store-service
-        private Long departmentId;   // from org-service
-        private String region;       // optional snapshot
-        private  String employeeId;   // from employee-service
-        private Long processedById; // from employee-service
+        private UUID storeId;        // from store-service
+        private UUID   departmentId;   // from org-service
+            // optional snapshot
+
+        private UUID  processedById; // from employee-service
+
+        @Column(nullable = false)
+        private String region;
+
+        @Column(nullable = false)
         private LocalDate registrationDate;
 
         private String processedBy;  // optional snapshot

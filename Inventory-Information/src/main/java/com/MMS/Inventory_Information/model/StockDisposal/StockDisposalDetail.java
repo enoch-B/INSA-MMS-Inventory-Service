@@ -26,7 +26,7 @@ public class StockDisposalDetail {
     private  String description; // Description of the disposal action
 
     @Column(nullable = false)
-    private BigDecimal sellingPrice; // Price at which the item was disposed of, if applicable
+    private UUID sellingPrice; // Price at which the item was disposed of, if applicable
 
 
     @Column(nullable = false)

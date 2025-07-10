@@ -15,10 +15,13 @@ import java.util.UUID;
 public class FixedAssetTransfer {
 
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        private UUID id;
 
         private UUID tenantId;
+        private UUID employeeId; // to employee-service
+        private UUID departmentId; //  to department-service
+        private UUID preparedById; // FK to employee-service
 
         @Column(nullable = false)
         private String transferNo;
@@ -28,14 +31,14 @@ public class FixedAssetTransfer {
         private TransferType transferType;
 
         @Column(nullable = false)
-        private String transferFrom;
+        private UUID transferFromId;
 
         @Column(nullable = false)
-        private String transferTo;
+        private UUID transferToId;
 
-        private String transferDepartment;
+//        private String transferDepartment; // Optional snapshot of department name
 
-        private String processedBy;
+//        private String processedBy;
         private LocalDate processedOn;
 
         @OneToMany(mappedBy = "fixedAssetTransfer", cascade = CascadeType.ALL, orphanRemoval = true)

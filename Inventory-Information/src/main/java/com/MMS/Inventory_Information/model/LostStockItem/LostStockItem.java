@@ -18,7 +18,7 @@ import java.util.UUID;
 public class LostStockItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     private UUID tenantId;
 
@@ -32,7 +32,12 @@ public class LostStockItem {
     private Long departmentId;   // FK to HR/department service
     private Long storeId;        // FK to store-service
 
-    private Long committeeId;        // FK to committee-service
+//    private UUID committeeId;        // FK to committee-service
+
+//    @Column(nullable = false)
+    private String committeeName; // Optional snapshot of committee name
+    private String committeeMembers; // Optional snapshot of committee members
+
     private Long processedById;      // FK to user/employee-service
     private LocalDate processedOn;
 
@@ -44,7 +49,12 @@ public class LostStockItem {
     private List<Long> committeeMemberIds; // IDs of users (FK to employee-service)
 
     // File attachment
-    private String attachmentUrl;
+    private String fileUrl;
+    private String fileName;
+    private String fileType;
+
+    @ElementCollection
+    private List<String> file;
 
     // Audit
     private LocalDateTime createdAt;

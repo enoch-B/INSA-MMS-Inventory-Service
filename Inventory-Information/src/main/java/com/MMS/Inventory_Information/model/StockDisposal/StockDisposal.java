@@ -36,7 +36,7 @@ public class StockDisposal {
     @Column(nullable = false)
     private LocalDateTime proposedOn;
 
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private String attachmentUrl;
 
     @OneToMany(mappedBy = "StockDisposal", cascade = CascadeType.ALL, orphanRemoval = true)
