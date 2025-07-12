@@ -15,7 +15,7 @@ public class InventoryBalanceItem {
         private UUID id;
 
         private UUID itemId;       // Reference to Item from item-service
-
+        private String itemCode;
 //        private String itemCode;
 //        private String itemName;
 //        private String unitMeasure; // Optional snapshots from item-service

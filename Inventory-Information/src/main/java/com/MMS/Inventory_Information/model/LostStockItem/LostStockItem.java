@@ -17,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class LostStockItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     private UUID tenantId;
@@ -28,36 +28,42 @@ public class LostStockItem {
 
     private LocalDate registrationDate;
 
-    private Long regionId;       // FK to region-service (or static lookup)
-    private Long departmentId;   // FK to HR/department service
-    private Long storeId;        // FK to store-service
+    private UUID regionId;       // FK to region-service (or static lookup)
+    private UUID departmentId;   // FK to HR/department service
+    private UUID storeId;        // FK to store-service
 
-//    private UUID committeeId;        // FK to committee-service
+    private UUID committeeId; // FK to committee-service
 
-//    @Column(nullable = false)
-    private String committeeName; // Optional snapshot of committee name
-    private String committeeMembers; // Optional snapshot of committee members
+    private String committeeName; // Name of the committee at the time of count
 
-    private Long processedById;      // FK to user/employee-service
+    @ElementCollection
+    @CollectionTable(name = "inventory_count_committee_members", joinColumns = @JoinColumn(name = "inventory_count_id"))
+    @Column(name = "member_id")
+    private List<UUID> committeeMemberIds; // From employee-service
+
+    @ElementCollection
+    @CollectionTable(name = "inventory_count_committee_member_names", joinColumns = @JoinColumn(name = "inventory_count_id"))
+    @Column(name = "member_name")
+    private List<String> committeeMembersName; // Names at the time of count
+
+
+    private UUID processedById;      // FK to user/employee-service
+
+    private String processedBy;      // Optional snapshot of user ID
     private LocalDate processedOn;
 
     // Relations
     @OneToMany(mappedBy = "lostStockItem", cascade = CascadeType.ALL)
     private List<LostStockItemDetail> itemDetails;
 
-    @ElementCollection
-    private List<Long> committeeMemberIds; // IDs of users (FK to employee-service)
-
     // File attachment
-    private String fileUrl;
     private String fileName;
     private String fileType;
 
-    @ElementCollection
-    private List<String> file;
+    @Lob
+    @Column(name="data")
+    private byte[] data; // File data as byte array
 
-    // Audit
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
 }
 

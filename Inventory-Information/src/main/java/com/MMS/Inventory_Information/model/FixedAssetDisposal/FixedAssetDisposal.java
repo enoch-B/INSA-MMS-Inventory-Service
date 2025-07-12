@@ -2,6 +2,8 @@ package com.MMS.Inventory_Information.model.FixedAssetDisposal;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,7 +13,7 @@ import java.util.UUID;
 @Table(name = "fixed_asset_disposal")
 public class FixedAssetDisposal {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     private UUID tenantId;
@@ -37,7 +39,29 @@ public class FixedAssetDisposal {
     private LocalDateTime proposedDate;
 
     @Column(nullable = true)
-    private String attachmentUrl; // URL for any attachments related to the disposal
+
+    private String fileName; // Name of the attached file
+    private String fileType; // Type of the attached file (e.g., PDF, DOCX)
+
+    // Auditing fields
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now(); // Only update timestamp
+    }
+
 
     @OneToMany(mappedBy = "fixedAssetDisposal", cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<FixedAssetDisposalDetail> disposalDetails; // Details of the disposed assets

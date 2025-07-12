@@ -12,13 +12,13 @@ import java.util.UUID;
 @Table(name = "fixed_asset_disposal_details")
 public class FixedAssetDisposalDetail {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     private UUID itemId; // from asset-service
 
     private UUID fixedAssetId; // from fixed-asset-service
-    private UUID tagId; // from fixed-asset-service
+    private String tagNumber; // from fixed-asset-service
     private UUID gainLossValueId;
     private UUID sellingPrice;
 

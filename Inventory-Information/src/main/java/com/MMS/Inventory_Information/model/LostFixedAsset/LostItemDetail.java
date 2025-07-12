@@ -20,7 +20,7 @@ public class LostItemDetail {
 
     private UUID fixedAssetId;      // from fixed asset-service
     private UUID itemId;         // from item-service
-    private UUID tagId;         // from fixed-asset-service
+
 
     private String tagNo;
 //    private String itemName;      // optional snapshot

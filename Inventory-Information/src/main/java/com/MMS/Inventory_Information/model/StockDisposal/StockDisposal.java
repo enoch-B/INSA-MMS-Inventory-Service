@@ -3,7 +3,10 @@ package com.MMS.Inventory_Information.model.StockDisposal;
 import com.MMS.Inventory_Information.model.FixedAssetDisposal.FixedAssetDisposalDetail;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -13,7 +16,7 @@ import java.util.UUID;
 @Table(name = "stock_disposal")
 public class StockDisposal {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     private UUID tenantId;
@@ -28,16 +31,37 @@ public class StockDisposal {
     private String disposalStatus;
 
     @Column(nullable = false)
-    private LocalDateTime proposeDate;
+    private LocalDate proposeDate;
 
     @Column(nullable = false)
     private String approvedDate;
 
     @Column(nullable = false)
-    private LocalDateTime proposedOn;
+    private LocalDate proposedOn;
 
-    @Column(updatable = false)
-    private String attachmentUrl;
+
+    private String fileName;
+    private String fileType;
+
+
+    //Auditing fields
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now(); // Only update timestamp
+    }
 
     @OneToMany(mappedBy = "StockDisposal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StockDisposalDetail> stockDisposalDetails; // Details of the disposed assets

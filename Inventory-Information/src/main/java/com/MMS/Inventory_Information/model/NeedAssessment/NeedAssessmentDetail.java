@@ -19,9 +19,6 @@ public class NeedAssessmentDetail {
     private NeedAssessment needAssessment;
 
     private UUID itemId;         // reference to item-service
-    private String itemName;     // snapshot
-    private String unitMeasure;  // snapshot
-    private BigDecimal quantity;
 
     private String generalLedger;  // snapshot
     private BigDecimal budgetAmount; // snapshot

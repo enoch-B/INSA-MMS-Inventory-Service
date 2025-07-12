@@ -1,11 +1,13 @@
 package com.MMS.Inventory_Information.model.InventoryCountSheet;
 
 import com.MMS.Inventory_Information.enums.CountType;
+import com.MMS.Inventory_Information.enums.StoreType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,12 +19,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-
 public class InventoryCount {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
 
     private UUID tenantId;
 
@@ -31,23 +31,40 @@ public class InventoryCount {
 
     @Column(nullable = false)
     private UUID storeId; // From store-service
-    private UUID preparedById; // From user-service
-    private String committeeId;
+
+    private UUID preparedById; // From employee-service
+
+    private UUID committeeId; // FK to committee-service
+
+    private String committeeName; // Name of the committee at the time of count
+
+    @ElementCollection
+    @CollectionTable(name = "inventory_count_committee_members", joinColumns = @JoinColumn(name = "inventory_count_id"))
+    @Column(name = "member_id")
+    private List<UUID> committeeMemberIds; // From employee-service
+
+    @ElementCollection
+    @CollectionTable(name = "inventory_count_committee_member_names", joinColumns = @JoinColumn(name = "inventory_count_id"))
+    @Column(name = "member_name")
+    private List<String> committeeMemberName; // Snapshot
 
     @Enumerated(EnumType.STRING)
     private CountType countType;    // e.g., Periodic, Perpetual
 
+    @Enumerated(EnumType.STRING)
+    private StoreType storeType; // e.g., Internal, Merchandise
+
     private String budgetYear;
     private LocalDate countDate;
 
-    private String preparedBy; //Optional snapshot of user ID
+    private String preparedBy;
     private LocalDate preparedOn;
 
-//    private String committeeId;
-//    private String committeeMembers;
-
-
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @PrePersist
@@ -58,13 +75,10 @@ public class InventoryCount {
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now(); // Only update timestamp
+        this.updatedAt = LocalDateTime.now();
     }
-
 
     @OneToMany(mappedBy = "inventoryCount", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InventoryDetail> inventoryDetails;
-
-
-
 }
+

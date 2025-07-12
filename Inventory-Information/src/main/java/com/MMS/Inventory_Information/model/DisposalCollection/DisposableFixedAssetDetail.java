@@ -18,23 +18,18 @@ public class DisposableFixedAssetDetail {
 
         @ManyToOne
         @JoinColumn(name = "disposable_asset_id")
-        private DisposableAsset disposableFixedAsset;
+        private DisposableAsset disposableAsset;
 
         private UUID fixedAssetId; // From fixed-asset-service
-        private String tagNumber;  // From fixed-asset-service
+        private UUID itemId; // From item-service
+        private String tagNumber;
 
-        private int quantity;
-        private String itemCode;   // snapshot
-        private String itemName;   // snapshot
-       private BigDecimal unitPrice; //Snapshot;
+        private BigDecimal bookValue;
+        private String accountCode;
 
-        private BigDecimal bookValueSnapshot;
-
-        private String accountCodeSnapshot;
-        private String itemStatus; // optional snapshot
 
         private String description;
-
+        private Integer quantity;
         private LocalDate expirationDate;
         private String batchNo;
 

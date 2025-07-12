@@ -18,7 +18,7 @@ public class FixedAssetTransferDetail {
 
         private UUID fixedAssetId; // Reference to Fixed Asset from fixed-asset-service
         private UUID itemId; // Reference to Item from item-service
-        private UUID tagId; // Reference to Tag from fixed-asset-service
+        private String tagNumber; // Reference to Tag from fixed-asset-service
 
 //        private String tagNo;    optional snapshots
 //        private String itemName;

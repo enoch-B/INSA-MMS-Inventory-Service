@@ -4,8 +4,11 @@ package com.MMS.Inventory_Information.model.FixedAssetTransfer;
 import com.MMS.Inventory_Information.enums.TransferType;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,10 +39,29 @@ public class FixedAssetTransfer {
         @Column(nullable = false)
         private UUID transferToId;
 
-//        private String transferDepartment; // Optional snapshot of department name
 
-//        private String processedBy;
+        private String processedBy;
         private LocalDate processedOn;
+
+        //audit fields
+        @CreatedDate
+        @Column(nullable = false, updatable = false)
+        private LocalDateTime createdAt;
+
+        @LastModifiedDate
+        private LocalDateTime updatedAt;
+
+        @PrePersist
+        protected void onCreate() {
+                this.createdAt = LocalDateTime.now();
+                this.updatedAt = LocalDateTime.now();
+        }
+
+        @PreUpdate
+        protected void onUpdate() {
+                this.updatedAt = LocalDateTime.now(); // Only update timestamp
+        }
+
 
         @OneToMany(mappedBy = "fixedAssetTransfer", cascade = CascadeType.ALL, orphanRemoval = true)
         private List<FixedAssetTransferDetail> transferDetails;

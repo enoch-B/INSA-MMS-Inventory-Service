@@ -22,11 +22,14 @@ public class InventoryDetail {
     private UUID tenantId;
 
     @Column(nullable = false)
-    private UUID itemsId;  // From item-service
+    private UUID itemId;  // From item-service
+    private String itemCode;
 
-//    private String itemName;    // Optional: store snapshot
-//    private String itemCode;    // Optional: item service  snapshot
-//    private String unitMeasure;  // Optional: item service snapshot
+/*
+    private String itemName;    // Optional: store snapshot
+    private String itemCode;    // Optional: item service  snapshot
+    private String unitMeasure;  // Optional: item service snapshot
+*/
 
     private int quantity;
     private String remark;

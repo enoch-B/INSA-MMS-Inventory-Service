@@ -35,6 +35,7 @@ public class DisposableAsset {
         private DisposalStatus disposalStatus; // PENDING, COMPLETED, etc.
 
         private UUID processedById;
+
         private String processedByName; // snapshot
         private LocalDateTime processedOn;
 

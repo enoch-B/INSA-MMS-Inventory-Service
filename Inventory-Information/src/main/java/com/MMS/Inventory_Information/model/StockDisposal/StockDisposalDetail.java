@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Generated;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ public class StockDisposalDetail {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private UUID itemsId; // from item-service
+    private UUID itemId; // from item-service
     private UUID processedBy; // from user-service
 
     @Column(nullable = false)
@@ -30,14 +31,14 @@ public class StockDisposalDetail {
 
 
     @Column(nullable = false)
-    private LocalDateTime expirationDate; // Date when the item was disposed of
+    private LocalDate expirationDate; // Date when the item was disposed of
 
    @Column(nullable=false)
-    private LocalDateTime processedOn; // Date when the disposal was processed
+    private LocalDate processedOn; // Date when the disposal was processed
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stock_disposal_id", nullable = false)
-    private StockDisposal stockDisposal; // Reference to the parent StockDisposal entity
+    private StockDisposal StockDisposal; // Reference to the parent StockDisposal entity
 
 
 }

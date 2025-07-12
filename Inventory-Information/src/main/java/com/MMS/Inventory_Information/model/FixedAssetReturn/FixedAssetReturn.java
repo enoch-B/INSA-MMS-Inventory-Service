@@ -2,8 +2,11 @@ package com.MMS.Inventory_Information.model.FixedAssetReturn;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,6 +38,26 @@ public class FixedAssetReturn {
     private LocalDate receivedDate; // Date when the asset was received
     private LocalDate returnedDate; // Date when the asset was returned
     private LocalDate processedOn; // Date when the return was processed
+
+
+    // audit fields
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now(); // Only update timestamp
+    }
 
 
         @OneToMany(mappedBy = "fixedAssetReturn", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -15,12 +15,15 @@ import java.util.UUID;
 public class LostAssetFile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID  id;
 
     private String filename;
-    private String fileUrl;
     private String fileType;
+
+    @Lob
+    @Column(name="data")
+    private byte[] data; // File data as byte array
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lost_fixed_asset_id")

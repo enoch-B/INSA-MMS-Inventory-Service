@@ -17,15 +17,12 @@ public class FixedAssetReturnDetail {
      private UUID id;
 
 
-    private UUID itemsId; // from another service
+    private UUID itemId; // from another service
     private  UUID fixedAssetId; // from the fixed asset
-    private UUID tagId; // from the fixed asset service
+
     @Column(nullable = false)
     private String itemStatus; //
 
-
-
-    private String itemName; // snapshot from another service
      private String bookValue; // snapshot from another service
      private String accountCode; // snapshot from another service
     private String tagNumber; // snapshot from fixed asset service
