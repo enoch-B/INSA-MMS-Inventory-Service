@@ -46,7 +46,7 @@ public class LostStockItem {
 
     @ElementCollection
     @CollectionTable(
-            name = "lost_stock_committee_member_names", // ✅ Unique table name
+            name = "lost_stock_committee_member_names", // Unique table name
             joinColumns = @JoinColumn(name = "lost_stock_item_id")
     )
     @Column(name = "member_name")
@@ -68,7 +68,7 @@ public class LostStockItem {
 
     @Lob
     @Column(name="data")
-    private byte[] data; // File data as byte array
+    private byte[] data; // File data as a byte array
 
 
 }
