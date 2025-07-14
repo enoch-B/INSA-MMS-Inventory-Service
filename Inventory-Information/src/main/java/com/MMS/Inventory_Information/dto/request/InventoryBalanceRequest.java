@@ -1,5 +1,6 @@
 package com.MMS.Inventory_Information.dto.request;
 
+import com.MMS.Inventory_Information.enums.StoreType;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,12 +18,11 @@ import java.util.UUID;
 @Valid
 public class InventoryBalanceRequest {
     private UUID tenantId;
-    private UUID inventoryCountSheetId;
-    private String storeMan;
-    private String storeName;
-    private String budgetYear;
-    private String storeType;
+    private UUID preparedById;
     private String preparedBy;
     private LocalDate preparedOn;
+    private UUID inventoryCountId;
+    private StoreType storeType;
+
     private List<InventoryBalanceItemRequest> items;
 }
