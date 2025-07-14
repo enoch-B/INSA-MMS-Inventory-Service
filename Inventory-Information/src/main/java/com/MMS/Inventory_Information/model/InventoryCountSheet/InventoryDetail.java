@@ -1,9 +1,7 @@
 package com.MMS.Inventory_Information.model.InventoryCountSheet;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -12,7 +10,6 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class InventoryDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

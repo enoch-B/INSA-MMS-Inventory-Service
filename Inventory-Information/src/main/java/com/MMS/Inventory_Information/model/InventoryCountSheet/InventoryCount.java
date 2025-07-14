@@ -3,9 +3,7 @@ package com.MMS.Inventory_Information.model.InventoryCountSheet;
 import com.MMS.Inventory_Information.enums.CountType;
 import com.MMS.Inventory_Information.enums.StoreType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -19,6 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+
 public class InventoryCount {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -37,14 +37,20 @@ public class LostStockItem {
     private String committeeName; // Name of the committee at the time of count
 
     @ElementCollection
-    @CollectionTable(name = "inventory_count_committee_members", joinColumns = @JoinColumn(name = "inventory_count_id"))
+    @CollectionTable(
+            name = "lost_stock_committee_members", // ✅ Unique table name
+            joinColumns = @JoinColumn(name = "lost_stock_item_id") // ✅ Unique FK name
+    )
     @Column(name = "member_id")
-    private List<UUID> committeeMemberIds; // From employee-service
+    private List<UUID> committeeMemberIds;
 
     @ElementCollection
-    @CollectionTable(name = "inventory_count_committee_member_names", joinColumns = @JoinColumn(name = "inventory_count_id"))
+    @CollectionTable(
+            name = "lost_stock_committee_member_names", // ✅ Unique table name
+            joinColumns = @JoinColumn(name = "lost_stock_item_id")
+    )
     @Column(name = "member_name")
-    private List<String> committeeMembersName; // Names at the time of count
+    private List<String> committeeMembersName;
 
 
     private UUID processedById;      // FK to user/employee-service
