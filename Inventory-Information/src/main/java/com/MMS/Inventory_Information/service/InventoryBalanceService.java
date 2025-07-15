@@ -47,7 +47,7 @@ public class InventoryBalanceService {
         for (InventoryDetail detail : inventoryCountDetailRepository.findAllByInventoryCountId(inventoryCount.getId())) {
             InventoryBalanceItem balanceItem = new InventoryBalanceItem();
             balanceItem.setId(UUID.randomUUID());
-            balanceItem.setItemId(detail.getItemId());
+            balanceItem.setItemId(detail.getItemId()); // Reference to Item from item-service
             balanceItem.setItemCode(detail.getItemCode());
             balanceItem.setQuantity(detail.getQuantity());
             balanceItem.setRemark(detail.getRemark());

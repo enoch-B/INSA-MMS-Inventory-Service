@@ -18,13 +18,14 @@ public class LostItemDetail {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private UUID fixedAssetId;      // from fixed asset-service
+    @Column(nullable = false)
     private UUID itemId;         // from item-service
 
 
     private String tagNo;
 //    private String itemName;      // optional snapshot
     private Double bookValue;
+
     private String accountCode;
 
     @Column(nullable = false)

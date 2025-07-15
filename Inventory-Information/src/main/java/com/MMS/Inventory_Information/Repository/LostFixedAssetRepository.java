@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface LostFARepository extends JpaRepository<LostFixedAsset, UUID> {
+public interface LostFixedAssetRepository extends JpaRepository<LostFixedAsset, UUID> {
 }

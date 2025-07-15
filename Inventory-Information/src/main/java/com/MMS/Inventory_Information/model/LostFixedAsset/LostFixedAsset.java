@@ -43,6 +43,14 @@ public class LostFixedAsset {
         private String processedBy;  // optional snapshot
         private LocalDate processedOn;
 
+
+        private String filename;
+        private String fileType;
+
+        @Lob
+        @Column(name="data")
+        private byte[] data;
+
         @CreatedDate
         @Column(nullable = false, updatable = false)
         private LocalDateTime createdAt;
@@ -64,8 +72,6 @@ public class LostFixedAsset {
         @OneToMany(mappedBy = "lostFixedAsset", cascade = CascadeType.ALL, orphanRemoval = true)
         private List<LostItemDetail> lostItemDetails;
 
-        @OneToMany(mappedBy = "lostFixedAsset", cascade = CascadeType.ALL, orphanRemoval = true)
-        private List<LostAssetFile> attachments;
 
 
 }
