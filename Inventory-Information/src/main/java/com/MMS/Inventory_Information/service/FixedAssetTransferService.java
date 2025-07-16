@@ -6,6 +6,7 @@ import com.MMS.Inventory_Information.Repository.FixedAssetTransferRepository;
 import com.MMS.Inventory_Information.dto.request.FixedAssetTransferRequest;
 import com.MMS.Inventory_Information.dto.response.FixedAssetTransferResponse;
 import com.MMS.Inventory_Information.model.FixedAssetTransfer.FixedAssetTransfer;
+import com.MMS.Inventory_Information.model.FixedAssetTransfer.FixedAssetTransferDetail;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -63,5 +64,58 @@ public class FixedAssetTransferService {
         return fixedAssetTransfers.stream()
                 .map(FixedAssetTransferMapper::toResponse) // Make sure this exists
                 .collect(Collectors.toList());
+    }
+
+    public FixedAssetTransferResponse getFixedAssetTransferById(UUID tenantId, UUID id) {
+        FixedAssetTransfer fixedAssetTransfer = fixedAssetTransferRepository
+                .findById(id)
+                .filter(transfer -> transfer.getTenantId().equals(tenantId))
+                .orElseThrow(() -> new RuntimeException("Fixed Asset Transfer not found with id: " + id));
+
+        return FixedAssetTransferMapper.toResponse(fixedAssetTransfer);
+    }
+
+    public FixedAssetTransferResponse getFixedAssetTransferByTransferNumber(UUID tenantId, String transferNumber) {
+        FixedAssetTransfer fixedAssetTransfer = fixedAssetTransferRepository
+                .findByTenantIdAndTransferNo(tenantId, transferNumber)
+                .orElseThrow(() -> new RuntimeException("Fixed Asset Transfer not found with transfer number: " + transferNumber));
+
+        return FixedAssetTransferMapper.toResponse(fixedAssetTransfer);
+    }
+
+    public FixedAssetTransferResponse updateFixedAssetTransfer(UUID tenantId, UUID id, FixedAssetTransferRequest fixedAssetTransferRequest) {
+            //Fetch the existing transfer
+        FixedAssetTransfer existingTransfer = fixedAssetTransferRepository
+                .findById(id)
+                .filter(transfer -> transfer.getTenantId().equals(tenantId))
+                .orElseThrow(() -> new RuntimeException("Fixed Asset Transfer not found with id: " + id));
+
+        //update only mutable fields
+        FixedAssetTransferMapper.updateEntity(existingTransfer, fixedAssetTransferRequest);
+        // Handle the detail: replace all with new or updated items
+
+        fixedAssetTransferDetailRepository.deleteAllByFixedAssetTransferId(existingTransfer.getId());
+        // Create new details from the request
+        List<FixedAssetTransferDetail> details = fixedAssetTransferRequest.getTransferDetails().stream().map(detail -> {
+            FixedAssetTransferDetail entity = new FixedAssetTransferDetail();
+            entity.setId(UUID.randomUUID());
+            entity.setItemId(detail.getItemId());
+            entity.setTagNumber(detail.getTagNumber());
+            entity.setBookValue(detail.getBookValue());
+            entity.setAccountCode(detail.getAccountCode());
+            entity.setQuantity(detail.getQuantity());
+            entity.setRemark(detail.getRemark());
+            entity.setDescription(detail.getDescription());
+            entity.setFixedAssetTransfer(existingTransfer);
+            return entity;
+        }).toList();
+
+        existingTransfer.setTransferDetails(details); // re-assign the list
+
+        // Save updated parent with new children
+        FixedAssetTransfer saved = fixedAssetTransferRepository.save(existingTransfer);
+
+        return FixedAssetTransferMapper.toResponse(saved);
+
     }
 }

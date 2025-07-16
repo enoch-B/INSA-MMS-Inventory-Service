@@ -30,4 +30,22 @@ public class FixedAssetTransferController {
 
     }
 
+    @GetMapping("/{tenantId}/get/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public FixedAssetTransferResponse getFixedAssetTransferById(@PathVariable UUID tenantId, @PathVariable UUID id) {
+        // logic for getting a fixed asset transfer by ID
+        return fixedAssetTransferService.getFixedAssetTransferById(tenantId, id);
+    }
+    @GetMapping("/{tenantId}/get/transfer-number/{transferNumber}")
+    @ResponseStatus(HttpStatus.OK)
+    public FixedAssetTransferResponse getFixedAssetTransferByTransferNumber(@PathVariable UUID tenantId, @PathVariable String transferNumber) {
+        // logic for getting a fixed asset transfer by transfer number
+        return fixedAssetTransferService.getFixedAssetTransferByTransferNumber(tenantId, transferNumber);
+    }
+    @PutMapping("/{tenantId}/update/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public FixedAssetTransferResponse updateFixedAssetTransfer(@PathVariable UUID tenantId, @PathVariable UUID id, @RequestBody FixedAssetTransferRequest fixedAssetTransferRequest) {
+        // logic for updating a fixed asset transfer
+        return fixedAssetTransferService.updateFixedAssetTransfer(tenantId, id, fixedAssetTransferRequest);
+    }
 }

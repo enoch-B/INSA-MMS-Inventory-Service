@@ -81,6 +81,19 @@ public class FixedAssetTransferMapper {
 
          return response;
    }
+    // for updating an existing entity
+   public static void updateEntity(FixedAssetTransfer existing, FixedAssetTransferRequest request) {
+        existing.setEmployeeId(request.getEmployeeId());
+        existing.setDepartmentId(request.getDepartmentId());
+        existing.setPreparedById(request.getPreparedById());
+        existing.setTransferType(request.getTransferType());
+        existing.setTransferFromId(request.getTransferFromId());
+        existing.setTransferToId(request.getTransferToId());
+        existing.setProcessedBy(request.getProcessedBy());
+        existing.setProcessedOn(request.getProcessedOn());
+        // Note: You do NOT update transferNo, createdAt, etc.
+    }
+
 
 
 }

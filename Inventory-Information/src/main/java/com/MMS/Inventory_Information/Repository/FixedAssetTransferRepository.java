@@ -4,7 +4,9 @@ import com.MMS.Inventory_Information.model.FixedAssetTransfer.FixedAssetTransfer
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface FixedAssetTransferRepository extends JpaRepository<FixedAssetTransfer, UUID> {
@@ -15,5 +17,5 @@ public interface FixedAssetTransferRepository extends JpaRepository<FixedAssetTr
 
     List<String> findRecentTransferNumbers(UUID tenantId, int currentYear);
     List<FixedAssetTransfer> findByTenantId(UUID tenantId);
-
+    Optional<FixedAssetTransfer> findByTenantIdAndTransferNo(UUID tenantId, String transferNumber);
 }
