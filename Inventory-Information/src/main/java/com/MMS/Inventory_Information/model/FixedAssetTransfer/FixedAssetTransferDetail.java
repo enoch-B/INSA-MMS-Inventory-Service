@@ -15,15 +15,9 @@ public class FixedAssetTransferDetail {
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         private UUID id;
-
-        private UUID fixedAssetId; // Reference to Fixed Asset from fixed-asset-service
         private UUID itemId; // Reference to Item from item-service
         private String tagNumber; // Reference to Tag from fixed-asset-service
 
-//        private String tagNo;    optional snapshots
-//        private String itemName;
-//        private String unitMeasure;
-//        private Double unitPrice;
 
 
         private Double bookValue;

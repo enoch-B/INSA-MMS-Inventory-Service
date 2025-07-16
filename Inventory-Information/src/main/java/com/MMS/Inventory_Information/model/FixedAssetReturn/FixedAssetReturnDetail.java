@@ -18,8 +18,6 @@ public class FixedAssetReturnDetail {
 
 
     private UUID itemId; // from another service
-    private  UUID fixedAssetId; // from the fixed asset
-
     @Column(nullable = false)
     private String itemStatus; //
 

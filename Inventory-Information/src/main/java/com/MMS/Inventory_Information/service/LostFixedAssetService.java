@@ -9,6 +9,7 @@ import com.MMS.Inventory_Information.model.LostFixedAsset.LostItemDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,8 @@ public class LostFixedAssetService {
                 .filename(lostFixedAssetRequest.getFileName())
                 .fileType(lostFixedAssetRequest.getFileType())
                 .data(lostFixedAssetRequest.getData())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
 
         // save the LostFixedAsset entity
