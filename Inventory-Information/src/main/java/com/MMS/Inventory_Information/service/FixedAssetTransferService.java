@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -54,5 +55,13 @@ public class FixedAssetTransferService {
 
         return FixedAssetTransferMapper.toResponse(savedEntity);
 
+    }
+
+    public List<FixedAssetTransferResponse> getAllFixedAssetTransfers(UUID tenantId) {
+        List<FixedAssetTransfer> fixedAssetTransfers = fixedAssetTransferRepository.findByTenantId(tenantId);
+
+        return fixedAssetTransfers.stream()
+                .map(FixedAssetTransferMapper::toResponse) // Make sure this exists
+                .collect(Collectors.toList());
     }
 }
