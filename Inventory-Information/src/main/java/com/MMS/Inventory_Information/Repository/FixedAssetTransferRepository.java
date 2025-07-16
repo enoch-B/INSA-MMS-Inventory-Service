@@ -14,4 +14,6 @@ public interface FixedAssetTransferRepository extends JpaRepository<FixedAssetTr
             "ORDER BY t.createdAt DESC")
 
     List<String> findRecentTransferNumbers(UUID tenantId, int currentYear);
+    List<FixedAssetTransfer> findByTenantId(UUID tenantId);
+
 }
