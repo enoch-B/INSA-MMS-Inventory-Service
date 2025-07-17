@@ -52,7 +52,7 @@ public class FixedAssetDisposalMapper {
          }
 
          public static FixedAssetDisposalResponse toResponse(FixedAssetDisposal entity) {
-             FixedAssetDisposalResponse response = new FixedAssetDisposalResponse()
+             FixedAssetDisposalResponse response = new FixedAssetDisposalResponse();
                      response.setId(entity.getId());
                      response.setTenantId(entity.getTenantId());
                      response.setStoreId(entity.getStoreId());
