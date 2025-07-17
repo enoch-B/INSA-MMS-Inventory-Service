@@ -88,8 +88,19 @@ public class FixedAssetDisposalMapper {
               return response;
 
          }
-
-
-}
+         // Update entity with request data
+    public static void updateEntity(FixedAssetDisposal entity, FixedAssetDisposalRequest request) {
+        entity.setStoreId(request.getStoreId());
+        entity.setProcessedById(request.getProcessedById());
+        entity.setProcessedBy(request.getProcessedBy());
+        entity.setApprovedDate(request.getApprovedDate());
+        entity.setDisposalStatus(request.getDisposalStatus());
+        entity.setProcessedOn(request.getProcessedOn());
+        entity.setProposedDate(request.getProposedDate());
+        entity.setFileName(request.getFileName());
+        entity.setFileType(request.getFileType());
+        entity.setFileData(request.getFileData());
+        }
+    }
 
 
