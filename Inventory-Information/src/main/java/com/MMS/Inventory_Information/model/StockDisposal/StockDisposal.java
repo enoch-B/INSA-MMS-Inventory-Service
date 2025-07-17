@@ -23,6 +23,7 @@ public class StockDisposal {
 
     private UUID storeId;
     private UUID processedById;
+    private String processedBy;
 
     @Column(nullable = false)
     private String disposalNo;
@@ -34,7 +35,7 @@ public class StockDisposal {
     private LocalDate proposeDate;
 
     @Column(nullable = false)
-    private String approvedDate;
+    private LocalDate approvedDate;
 
     @Column(nullable = false)
     private LocalDate proposedOn;
@@ -42,6 +43,7 @@ public class StockDisposal {
 
     private String fileName;
     private String fileType;
+    private Byte [] fileData;
 
 
     //Auditing fields

@@ -18,7 +18,7 @@ public class StockDisposalDetail {
     private UUID id;
 
     private UUID itemId; // from item-service
-    private UUID processedBy; // from user-service
+
 
     @Column(nullable = false)
     private String disposalMethod; // e.g., "Sell", "Donate", "Recycle", etc.
@@ -27,14 +27,13 @@ public class StockDisposalDetail {
     private  String description; // Description of the disposal action
 
     @Column(nullable = false)
-    private UUID sellingPrice; // Price at which the item was disposed of, if applicable
+    private BigDecimal sellingPrice; // Price at which the item was disposed of, if applicable
 
 
     @Column(nullable = false)
     private LocalDate expirationDate; // Date when the item was disposed of
 
-   @Column(nullable=false)
-    private LocalDate processedOn; // Date when the disposal was processed
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stock_disposal_id", nullable = false)
