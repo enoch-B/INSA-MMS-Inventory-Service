@@ -17,10 +17,10 @@ public class FixedAssetDisposalDetail {
 
     private UUID itemId; // from asset-service
 
-    private UUID fixedAssetId; // from fixed-asset-service
     private String tagNumber; // from fixed-asset-service
     private UUID gainLossValueId;
-    private UUID sellingPrice;
+    private UUID sellingPriceId;
+
 
     private String accountCode; // snapshot from fixed asset service
     private String BookValue; // snapshot from fixed asset service

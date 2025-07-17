@@ -1,10 +1,12 @@
 package com.MMS.Inventory_Information.model.FixedAssetDisposal;
 
+import com.MMS.Inventory_Information.enums.DisposalStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -21,27 +23,29 @@ public class FixedAssetDisposal {
     private UUID processedById; // from employee-service
 
     private String processedBy;  // optional snapshot
-    private String storeName; // optional snapshot of the store name
+//    private String storeName; // optional snapshot of the store name
 
     @Column(nullable = false)
-    private LocalDateTime ApprovedDate;
+    private LocalDate approvedDate;
 
     @Column(nullable = false)
-    private String disposalStatus; // e.g. "Pending", "Approved", "Rejected"
+    @Enumerated(EnumType.STRING)
+    private DisposalStatus disposalStatus; // e.g. "Pending", "Approved", "Rejected"
 
     @Column(nullable = false)
-    private LocalDateTime processedOn; // Date when the disposal was processed
+    private LocalDate processedOn; // Date when the disposal was processed
 
     @Column(nullable = false)
     private String FA_disposalNo;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime proposedDate;
+    private LocalDate proposedDate;
 
     @Column(nullable = true)
 
     private String fileName; // Name of the attached file
     private String fileType; // Type of the attached file (e.g., PDF, DOCX)
+    private byte[] fileData; // Binary data of the attached file
 
     // Auditing fields
     @CreatedDate
