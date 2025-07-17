@@ -2,6 +2,7 @@ package com.MMS.Inventory_Information.dto.request;
 
 
 import com.MMS.Inventory_Information.enums.TransferType;
+import jakarta.validation.Valid;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,7 +12,9 @@ import java.util.UUID;
 
 @Data
 @Builder
+@Valid
 public class FixedAssetTransferRequest {
+
        private UUID tenantId;
         private String transferNo;
         private UUID employeeId;

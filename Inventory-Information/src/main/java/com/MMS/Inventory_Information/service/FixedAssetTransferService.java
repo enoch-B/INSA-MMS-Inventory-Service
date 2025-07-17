@@ -23,7 +23,7 @@ public class FixedAssetTransferService {
      private final FixedAssetTransferRepository fixedAssetTransferRepository;
      private final FixedAssetTransferDetailRepository fixedAssetTransferDetailRepository;
 
-    public String generateInventoryCountNumber(UUID tenantId) {
+    public String generateFixedAssetTransferNumber(UUID tenantId) {
         int currentYear = LocalDate.now().getYear();
         List<String> recentNumbers = fixedAssetTransferRepository.findRecentTransferNumbers(tenantId, currentYear);
         int nextNumber = 1;
@@ -42,7 +42,7 @@ public class FixedAssetTransferService {
 
     public FixedAssetTransferResponse addFixedAssetTransfer(UUID tenantId, FixedAssetTransferRequest fixedAssetTransferRequest) {
         //Generate transfer number
-        String transferNo = generateInventoryCountNumber(tenantId);
+        String transferNo = generateFixedAssetTransferNumber(tenantId);
 
         //set the generated transfer number and tenant id
         fixedAssetTransferRequest.setTenantId(tenantId);
@@ -117,5 +117,14 @@ public class FixedAssetTransferService {
 
         return FixedAssetTransferMapper.toResponse(saved);
 
+    }
+
+    public void deleteFixedAssetTransfer(UUID tenantId, UUID id) {
+        FixedAssetTransfer fixedAssetTransfer = fixedAssetTransferRepository
+                .findById(id)
+                .filter(transfer -> transfer.getTenantId().equals(tenantId))
+                .orElseThrow(() -> new RuntimeException("Fixed Asset Transfer not found with id: " + id));
+
+         fixedAssetTransferRepository.delete(fixedAssetTransfer);
     }
 }
