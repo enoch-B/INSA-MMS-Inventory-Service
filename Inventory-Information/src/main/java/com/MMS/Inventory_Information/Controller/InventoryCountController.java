@@ -4,6 +4,7 @@ import com.MMS.Inventory_Information.dto.request.InventoryCountRequest;
 import com.MMS.Inventory_Information.dto.response.InventoryCountResponse;
 import com.MMS.Inventory_Information.service.InventoryCountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
@@ -20,10 +21,11 @@ public class InventoryCountController {
     private final InventoryCountService inventoryCountService;
 
     @PostMapping("{tenantId}/add")
-    public ResponseEntity<String> createInventoryCount(@PathVariable UUID tenantId,
+    @ResponseStatus(HttpStatus.CREATED)
+    public InventoryCountResponse createInventoryCount(@PathVariable UUID tenantId,
                                                        @RequestBody InventoryCountRequest inventoryCountRequest) {
-        inventoryCountService.createInventoryCount(tenantId, inventoryCountRequest);
-        return ResponseEntity.ok("Inventory Count Created Successfully");
+      return  inventoryCountService.createInventoryCount(tenantId, inventoryCountRequest);
+
     }
 
     @GetMapping("/{tenantId}/{id}")

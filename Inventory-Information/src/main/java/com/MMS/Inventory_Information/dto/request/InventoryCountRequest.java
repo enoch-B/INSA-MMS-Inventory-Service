@@ -20,17 +20,17 @@ import java.util.UUID;
 @Getter
 public class InventoryCountRequest {
     private UUID tenantId;
-    private String inventoryCountNo;
     private UUID storeId;
-    private String storeName;
-    private String storeMan;
-    private String budgetYear;
-    private StoreType storeType; // Enum recommended: INTERNAL / MERCHANDISED
-   private CountType countType; // Enum recommended: PERIODIC / PERPETUAL
-
+    private UUID preparedById;
     private UUID committeeId;
-    private List<UUID> committeeMemberIds;
-
+    private String inventoryCountNumber;
+    private String committeeName;
+    private List<UUID> committeeMembersId;
+    private List<String> committeeMembersName;
+    private CountType countType;
+    private StoreType storeType;
+    private UUID budgetYearId;
+    private LocalDate countDate;
     private String preparedBy;
     private LocalDate preparedOn;
 

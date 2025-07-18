@@ -12,7 +12,6 @@ import java.util.UUID;
 public class InventoryCountDetailResponse {
     private UUID id;
     private UUID itemId;
-    private String itemCode;
     private int quantity;
     private String remark;
 }

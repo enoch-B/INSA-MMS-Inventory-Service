@@ -6,9 +6,10 @@ import com.MMS.Inventory_Information.Repository.InventoryCountDetailRepository;
 import com.MMS.Inventory_Information.Repository.InventoryCountRepository;
 import com.MMS.Inventory_Information.dto.request.InventoryCountRequest;
 import com.MMS.Inventory_Information.dto.response.InventoryCountResponse;
-import com.MMS.Inventory_Information.mapper.InventoryCountMapper;
+import com.MMS.Inventory_Information.Mapper.InventoryCountMapper;
 import com.MMS.Inventory_Information.model.InventoryCountSheet.InventoryCount;
 import com.MMS.Inventory_Information.model.InventoryCountSheet.InventoryDetail;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,40 +54,30 @@ public class InventoryCountService {
 
     /**
      * Creates and saves an InventoryCount with its associated detail items.
+     *
+     *
      */
-    public void createInventoryCount(UUID tenantId, InventoryCountRequest request) {
+
+    @Transactional
+    public InventoryCountResponse createInventoryCount(UUID tenantId, InventoryCountRequest request) {
         String committeeName = committeeService.getCommitteeNameById(request.getCommitteeId());
-        List<String> memberNames = employeeService.getEmployeeNamesByIds(request.getCommitteeMemberIds());
+        List<String> memberNames = employeeService.getEmployeeNamesByIds(request.getCommitteeMembersId());
+        String inventoryCountNumber = generateInventoryCountNumber(tenantId);
+        //set the inventory count number and tenant ID
+        request.setInventoryCountNumber(inventoryCountNumber);
+        request.setTenantId(tenantId);
+        request.setCommitteeName(committeeName);
+        request.setCommitteeMembersName(memberNames);
+        // Map DTO to entity
+        InventoryCount inventoryCount = InventoryCountMapper.toEntity(request);
 
-        InventoryCount inventoryCount = new InventoryCount();
-        inventoryCount.setTenantId(tenantId);
-        inventoryCount.setInventoryCountNumber(generateInventoryCountNumber(tenantId));
-        inventoryCount.setStoreId(request.getStoreId());
-        inventoryCount.setPreparedBy(request.getPreparedBy());
-        inventoryCount.setPreparedOn(LocalDate.now());
-        inventoryCount.setBudgetYear(request.getBudgetYear());
-        inventoryCount.setCountType(request.getCountType());
-        inventoryCount.setStoreType(request.getStoreType());
-        inventoryCount.setCountDate(request.getPreparedOn());
+        //save the inventory count entity
+        InventoryCount savedCount = inventoryCountRepository.save(inventoryCount);
+        // return the response DTO
 
-        inventoryCount.setCommitteeId(request.getCommitteeId());
-        inventoryCount.setCommitteeName(committeeName);
-        inventoryCount.setCommitteeMemberIds(request.getCommitteeMemberIds());
-        inventoryCount.setCommitteeMemberName(memberNames);
+        return InventoryCountMapper.toResponse(savedCount);
 
-        List<InventoryDetail> details = request.getInventoryItems().stream().map(itemRequest -> {
-            InventoryDetail detail = new InventoryDetail();
-            detail.setTenantId(tenantId);
-            detail.setInventoryCount(inventoryCount);
-            detail.setItemId(itemRequest.getItemId());
-            detail.setItemCode(itemRequest.getItemCode());
-            detail.setQuantity(itemRequest.getQuantity());
-            detail.setRemark(itemRequest.getRemark());
-            return detail;
-        }).collect(Collectors.toList());
 
-        inventoryCount.setInventoryDetails(details);
-        inventoryCountRepository.save(inventoryCount);
     }
 
     /**

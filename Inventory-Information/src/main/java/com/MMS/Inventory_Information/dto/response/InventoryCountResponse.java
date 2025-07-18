@@ -16,24 +16,20 @@ import java.util.UUID;
 @NoArgsConstructor
 public class InventoryCountResponse {
     private UUID id;
-    private String inventoryCountNumber;
-
     private UUID tenantId;
+    private String inventoryCountNumber;
     private UUID storeId;
-
-    private String budgetYear;
-    private CountType countType;
-    private StoreType storeType;
-
+    private UUID preparedById;
     private UUID committeeId;
     private String committeeName;
-    private List<UUID> committeeMemberIds;
-    private List<String> committeeMemberName;
-
+    private List<UUID> committeeMembersId;
+    private List<String> committeeMembersName;
+    private CountType countType;
+    private StoreType storeType;
+    private UUID budgetYearId;
+    private LocalDate countDate;
     private String preparedBy;
     private LocalDate preparedOn;
-    private LocalDate countDate;
-
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

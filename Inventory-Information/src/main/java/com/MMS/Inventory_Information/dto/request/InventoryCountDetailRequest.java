@@ -16,9 +16,6 @@ import java.util.UUID;
 @Setter
 public class InventoryCountDetailRequest {
     private UUID itemId;  // From item-service
-    private String itemCode;
-    private String itemName;
-    private String unitMeasure;
     private int quantity;
     private String remark;
 

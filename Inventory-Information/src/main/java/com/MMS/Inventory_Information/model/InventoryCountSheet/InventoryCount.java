@@ -40,12 +40,12 @@ public class InventoryCount {
     @ElementCollection
     @CollectionTable(name = "inventory_count_committee_members", joinColumns = @JoinColumn(name = "inventory_count_id"))
     @Column(name = "member_id")
-    private List<UUID> committeeMemberIds; // From employee-service
+    private List<UUID> committeeMembersId; // From employee-service
 
     @ElementCollection
     @CollectionTable(name = "inventory_count_committee_member_names", joinColumns = @JoinColumn(name = "inventory_count_id"))
     @Column(name = "member_name")
-    private List<String> committeeMemberName; // Snapshot
+    private List<String> committeeMembersName; // Snapshot
 
     @Enumerated(EnumType.STRING)
     private CountType countType;    // e.g., Periodic, Perpetual
@@ -53,14 +53,13 @@ public class InventoryCount {
     @Enumerated(EnumType.STRING)
     private StoreType storeType; // e.g., Internal, Merchandise
 
-    private String budgetYear;
+    private UUID budgetYearId;
     private LocalDate countDate;
 
     private String preparedBy;
     private LocalDate preparedOn;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
