@@ -45,6 +45,16 @@ public class InventoryCountController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/{tenantId}/update/{id}")
+    public ResponseEntity<InventoryCountResponse> updateInventoryCount(
+            @PathVariable UUID tenantId,
+            @PathVariable UUID id,
+            @RequestBody InventoryCountRequest inventoryCountRequest) {
+        InventoryCountResponse response = inventoryCountService.updateInventoryCount(tenantId, id, inventoryCountRequest);
+        return ResponseEntity.ok(response);
+    }
+
+
     @DeleteMapping("/{tenantId}/{id}")
     public ResponseEntity<String> deleteInventoryCount(@PathVariable UUID tenantId,
                                                        @PathVariable UUID id) {

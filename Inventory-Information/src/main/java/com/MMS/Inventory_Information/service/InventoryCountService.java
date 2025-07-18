@@ -119,4 +119,35 @@ public class InventoryCountService {
 
         inventoryCountRepository.delete(count);
     }
+
+    @Transactional
+    public InventoryCountResponse updateInventoryCount(UUID tenantId, UUID id, InventoryCountRequest request) {
+        InventoryCount existingCount = inventoryCountRepository.findById(id)
+                .filter(ic -> ic.getTenantId().equals(tenantId))
+                .orElseThrow(() -> new RuntimeException("Inventory Count not found or tenant mismatch"));
+        // Update fields from request
+        if (!existingCount.getCommitteeId().equals(request.getCommitteeId())) {
+            String committeeName = committeeService.getCommitteeNameById(request.getCommitteeId());
+            List<String> memberNames = employeeService.getEmployeeNamesByIds(request.getCommitteeMembersId());
+            existingCount.setCommitteeName(committeeName);
+            existingCount.setCommitteeMembersName(memberNames);
+        }
+      inventoryCountDetailRepository.deleteAllByInventoryCountId(existingCount.getId());
+
+        List<InventoryDetail> details = request.getInventoryItems().stream().map(itemRequest -> {
+            InventoryDetail detail = new InventoryDetail();
+            detail.setId(UUID.randomUUID());
+            detail.setItemId(itemRequest.getItemId());
+            detail.setQuantity(itemRequest.getQuantity());
+            detail.setRemark(itemRequest.getRemark());
+            detail.setInventoryCount(existingCount);
+            return detail;
+        }).toList();
+
+        existingCount.setInventoryDetails(details);
+
+        InventoryCount updatedCount = inventoryCountRepository.save(existingCount);
+
+        return InventoryCountMapper.toResponse(updatedCount);
+    }
 }

@@ -79,4 +79,20 @@ public class InventoryCountMapper {
               return response;
        }
 
+       public static void updateEntity(InventoryCount entity, InventoryCountRequest request) {
+           entity.setStoreId(request.getStoreId());
+           entity.setBudgetYearId(request.getBudgetYearId());
+           entity.setCountType(request.getCountType());
+           entity.setStoreType(request.getStoreType());
+           entity.setCommitteeId(request.getCommitteeId());
+           entity.setCommitteeName(request.getCommitteeName());
+           entity.setCommitteeMembersId(request.getCommitteeMembersId());
+           entity.setCommitteeMembersName(request.getCommitteeMembersName());
+           entity.setPreparedBy(request.getPreparedBy());
+           entity.setPreparedOn(request.getPreparedOn());
+           entity.setCountDate(request.getCountDate());
+              // Clear existing details and set new ones
+
+       }
+
 }
