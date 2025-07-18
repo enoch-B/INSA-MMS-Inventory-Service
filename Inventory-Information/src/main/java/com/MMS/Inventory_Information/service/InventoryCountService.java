@@ -6,6 +6,8 @@ import com.MMS.Inventory_Information.Repository.InventoryCountDetailRepository;
 import com.MMS.Inventory_Information.Repository.InventoryCountRepository;
 import com.MMS.Inventory_Information.dto.request.InventoryCountDetailRequest;
 import com.MMS.Inventory_Information.dto.request.InventoryCountRequest;
+import com.MMS.Inventory_Information.dto.response.InventoryCountResponse;
+import com.MMS.Inventory_Information.mapper.InventoryCountMapper;
 import com.MMS.Inventory_Information.model.InventoryCountSheet.InventoryCount;
 import com.MMS.Inventory_Information.model.InventoryCountSheet.InventoryDetail;
 import lombok.RequiredArgsConstructor;
@@ -50,12 +52,9 @@ public class InventoryCountService {
      * Creates and saves an InventoryCount with its associated detail items.
      */
     public void createInventoryCount(UUID tenantId, InventoryCountRequest request) {
-
-        // Get snapshot values from other microservices (mocked for now)
         String committeeName = committeeService.getCommitteeNameById(request.getCommitteeId());
         List<String> memberNames = employeeService.getEmployeeNamesByIds(request.getCommitteeMemberIds());
 
-        //  Build the main InventoryCount entity
         InventoryCount inventoryCount = new InventoryCount();
         inventoryCount.setTenantId(tenantId);
         inventoryCount.setInventoryCountNumber(generateInventoryCountNumber(tenantId));
@@ -72,11 +71,10 @@ public class InventoryCountService {
         inventoryCount.setCommitteeMemberIds(request.getCommitteeMemberIds());
         inventoryCount.setCommitteeMemberName(memberNames);
 
-        // 🧾 Convert InventoryCountDetailRequest → InventoryDetail entities
         List<InventoryDetail> details = request.getInventoryItems().stream().map(itemRequest -> {
             InventoryDetail detail = new InventoryDetail();
             detail.setTenantId(tenantId);
-            detail.setInventoryCount(inventoryCount); // establish relationship
+            detail.setInventoryCount(inventoryCount);
             detail.setItemId(itemRequest.getItemId());
             detail.setItemCode(itemRequest.getItemCode());
             detail.setQuantity(itemRequest.getQuantity());
@@ -84,10 +82,39 @@ public class InventoryCountService {
             return detail;
         }).collect(Collectors.toList());
 
-        // 📎 Attach details to parent entity
         inventoryCount.setInventoryDetails(details);
-
-        // 💾 Save parent and details (cascade = ALL ensures detail saving)
         inventoryCountRepository.save(inventoryCount);
+    }
+
+    /**
+     * Get a single inventory count by ID (mapped to response DTO).
+     */
+    public InventoryCountResponse getInventoryCountById(UUID tenantId, UUID id) {
+        InventoryCount count = inventoryCountRepository.findById(id)
+                .filter(ic -> ic.getTenantId().equals(tenantId))
+                .orElseThrow(() -> new RuntimeException("InventoryCount not found or tenant mismatch"));
+
+        return InventoryCountMapper.toResponse(count);
+    }
+
+    /**
+     * Get all inventory counts for a tenant.
+     */
+    public List<InventoryCountResponse> getAllInventoryCounts(UUID tenantId) {
+        return inventoryCountRepository.findAll().stream()
+                .filter(ic -> ic.getTenantId().equals(tenantId))
+                .map(InventoryCountMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Delete an inventory count by ID and tenant.
+     */
+    public void deleteInventoryCount(UUID tenantId, UUID id) {
+        InventoryCount count = inventoryCountRepository.findById(id)
+                .filter(ic -> ic.getTenantId().equals(tenantId))
+                .orElseThrow(() -> new RuntimeException("InventoryCount not found or tenant mismatch"));
+
+        inventoryCountRepository.delete(count);
     }
 }
