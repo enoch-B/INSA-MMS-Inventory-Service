@@ -6,6 +6,8 @@ import com.MMS.Inventory_Information.service.InventoryCountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -17,9 +19,6 @@ public class InventoryCountController {
 
     private final InventoryCountService inventoryCountService;
 
-    /**
-     * Create a new inventory count for a given tenant
-     */
     @PostMapping("{tenantId}/add")
     public ResponseEntity<String> createInventoryCount(@PathVariable UUID tenantId,
                                                        @RequestBody InventoryCountRequest inventoryCountRequest) {
@@ -27,9 +26,6 @@ public class InventoryCountController {
         return ResponseEntity.ok("Inventory Count Created Successfully");
     }
 
-    /**
-     * Get a single inventory count by its ID
-     */
     @GetMapping("/{tenantId}/{id}")
     public ResponseEntity<InventoryCountResponse> getInventoryCountById(@PathVariable UUID tenantId,
                                                                         @PathVariable UUID id) {
@@ -37,18 +33,16 @@ public class InventoryCountController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     *  Get all inventory counts for a tenant
-     */
-    @GetMapping("/{tenantId}/all")
-    public ResponseEntity<List<InventoryCountResponse>> getAllInventoryCounts(@PathVariable UUID tenantId) {
-        List<InventoryCountResponse> responseList = inventoryCountService.getAllInventoryCounts(tenantId);
-        return ResponseEntity.ok(responseList);
+    // Suggested simpler path: /{tenantId} for paginated get-all
+    @GetMapping("/{tenantId}")
+    public ResponseEntity<Page<InventoryCountResponse>> getInventoryCountsPaginated(
+            @PathVariable UUID tenantId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<InventoryCountResponse> response = inventoryCountService.getPaginatedInventoryCounts(tenantId, page, size);
+        return ResponseEntity.ok(response);
     }
 
-    /**
-     *  Delete an inventory count by ID
-     */
     @DeleteMapping("/{tenantId}/{id}")
     public ResponseEntity<String> deleteInventoryCount(@PathVariable UUID tenantId,
                                                        @PathVariable UUID id) {

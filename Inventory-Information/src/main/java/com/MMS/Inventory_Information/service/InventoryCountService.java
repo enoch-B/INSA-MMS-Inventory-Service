@@ -4,13 +4,16 @@ import com.MMS.Inventory_Information.Helper.EmployeeService;
 import com.MMS.Inventory_Information.Helper.committeeService;
 import com.MMS.Inventory_Information.Repository.InventoryCountDetailRepository;
 import com.MMS.Inventory_Information.Repository.InventoryCountRepository;
-import com.MMS.Inventory_Information.dto.request.InventoryCountDetailRequest;
 import com.MMS.Inventory_Information.dto.request.InventoryCountRequest;
 import com.MMS.Inventory_Information.dto.response.InventoryCountResponse;
 import com.MMS.Inventory_Information.mapper.InventoryCountMapper;
 import com.MMS.Inventory_Information.model.InventoryCountSheet.InventoryCount;
 import com.MMS.Inventory_Information.model.InventoryCountSheet.InventoryDetail;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -98,17 +101,25 @@ public class InventoryCountService {
     }
 
     /**
-     * Get all inventory counts for a tenant.
+     * Get all inventory counts for a tenant (no pagination).
      */
     public List<InventoryCountResponse> getAllInventoryCounts(UUID tenantId) {
-        return inventoryCountRepository.findAll().stream()
-                .filter(ic -> ic.getTenantId().equals(tenantId))
+        return inventoryCountRepository.findAllByTenantId(tenantId).stream()
                 .map(InventoryCountMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
     /**
-     * Delete an inventory count by ID and tenant.
+     * Get paginated inventory counts for a tenant.
+     */
+    public Page<InventoryCountResponse> getPaginatedInventoryCounts(UUID tenantId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return inventoryCountRepository.findByTenantId(tenantId, pageable)
+                .map(InventoryCountMapper::toResponse);
+    }
+
+    /**
+     * Delete an inventory count by ID and tenant (hard delete).
      */
     public void deleteInventoryCount(UUID tenantId, UUID id) {
         InventoryCount count = inventoryCountRepository.findById(id)
