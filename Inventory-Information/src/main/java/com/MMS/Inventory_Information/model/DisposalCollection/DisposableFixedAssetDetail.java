@@ -20,7 +20,6 @@ public class DisposableFixedAssetDetail {
         @JoinColumn(name = "disposable_asset_id")
         private DisposableAsset disposableAsset;
 
-        private UUID fixedAssetId; // From fixed-asset-service
         private UUID itemId; // From item-service
         private String tagNumber;
 

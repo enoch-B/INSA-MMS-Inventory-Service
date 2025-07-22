@@ -1,6 +1,6 @@
 package com.MMS.Inventory_Information.enums;
 
-public enum Disposable_Type {
+public enum DisposableType {
     FixedAsset,
     NonFixedAsset,
     Merchandised
