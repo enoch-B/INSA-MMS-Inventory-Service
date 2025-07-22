@@ -13,14 +13,13 @@ import java.util.UUID;
 public class DisposableAssetRequest {
       private UUID tenantId;
       private String drNo;
-      private UUID itemId;
       private UUID storeId;
       private UUID departmentId;
       private UUID processedById;
       private DisposableType disposableType;
       private LocalDate requisitionDate;
       private DisposalStatus disposalStatus;
-      private String processedBy;
+      private String processedByName;
       private LocalDate processedOn;
 
       private List<DisposableFixedAssetDetail> disposableFixedAssetDetails;

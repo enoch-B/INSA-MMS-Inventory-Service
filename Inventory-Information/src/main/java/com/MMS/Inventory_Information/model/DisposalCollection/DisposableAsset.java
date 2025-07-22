@@ -4,8 +4,11 @@ import com.MMS.Inventory_Information.enums.DisposableType;
 import com.MMS.Inventory_Information.enums.DisposalStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,8 +41,25 @@ public class DisposableAsset {
         private String processedByName; // snapshot
         private LocalDate processedOn;
 
+        @CreatedDate
+        private LocalDateTime createdAt;
+
+        @LastModifiedDate
+        private LocalDateTime updatedAt;
+
+        @PrePersist
+        protected void onCreate() {
+                this.createdAt = LocalDateTime.now();
+                this.updatedAt = LocalDateTime.now();
+        }
+
+        @PreUpdate
+        protected void onUpdate() {
+                this.updatedAt = LocalDateTime.now();
+        }
+
         @OneToMany(mappedBy = "disposableAsset", cascade = CascadeType.ALL, orphanRemoval = true)
-        private List<DisposableFixedAssetDetail> items;
+        private List<DisposableFixedAssetDetail> disposableAssetDetail;
 
 
 }
