@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface FixedAssetDisposalRepository extends JpaRepository<FixedAssetDisposal, UUID> {
-    @Query("SELECT t.DisposalNo FROM FixedAssetDisposal t " +
+    @Query("SELECT t.fixedAssetDisposalNo FROM FixedAssetDisposal t " +
             "WHERE t.tenantId = :tenantId " +
             "AND EXTRACT(YEAR FROM t.createdAt) = :year " +
             "ORDER BY t.createdAt DESC")
@@ -17,5 +17,5 @@ public interface FixedAssetDisposalRepository extends JpaRepository<FixedAssetDi
 
     List<FixedAssetDisposal> findAllByTenantId(UUID tenantId);
 
-    Optional<FixedAssetDisposal> findByTenantIdAndFA_disposalNo(UUID tenantId, String disposalNumber);
+    Optional<FixedAssetDisposal> findByTenantIdAndFixedAssetDisposalNo(UUID tenantId, String disposalNumber);
 }

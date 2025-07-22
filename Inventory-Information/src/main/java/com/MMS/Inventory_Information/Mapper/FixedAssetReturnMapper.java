@@ -14,7 +14,6 @@ public class FixedAssetReturnMapper {
 
     public static FixedAssetReturn toEntity(FixedAssetReturnRequest request) {
         FixedAssetReturn entity = new FixedAssetReturn();
-        entity.setId(UUID.randomUUID());
         entity.setTenantId(request.getTenantId());
         entity.setDepartmentId(request.getDepartmentId());
         entity.setStoreId(request.getStoreId());
@@ -30,7 +29,6 @@ public class FixedAssetReturnMapper {
         if (request.getReturnDetails() != null) {
             List<FixedAssetReturnDetail> details = request.getReturnDetails().stream().map(detailReq -> {
                 FixedAssetReturnDetail detail = new FixedAssetReturnDetail();
-                detail.setId(UUID.randomUUID());
                 detail.setItemId(detailReq.getItemId());
                 detail.setItemStatus(detailReq.getItemStatus());
                 detail.setBookValue(detailReq.getBookValue());

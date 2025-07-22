@@ -15,7 +15,7 @@ import java.util.UUID;
 @Valid
 public class FixedAssetTransferRequest {
 
-       private UUID tenantId;
+        private UUID tenantId;
         private String transferNo;
         private UUID employeeId;
         private UUID departmentId;

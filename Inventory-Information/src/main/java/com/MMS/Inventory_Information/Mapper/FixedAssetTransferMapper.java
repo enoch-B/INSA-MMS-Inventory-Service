@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 public class FixedAssetTransferMapper {
    public static FixedAssetTransfer toEntity(FixedAssetTransferRequest request){
        FixedAssetTransfer entity = new FixedAssetTransfer();
-            entity.setId(UUID.randomUUID());
             entity.setTenantId(request.getTenantId());
             entity.setTransferNo(request.getTransferNo());
             entity.setEmployeeId(request.getEmployeeId());
@@ -27,7 +26,6 @@ public class FixedAssetTransferMapper {
      if(request.getTransferDetails() != null){
          List<FixedAssetTransferDetail> details = request.getTransferDetails().stream().map(detailReq ->{
                 FixedAssetTransferDetail detail = new FixedAssetTransferDetail();
-                detail.setId(UUID.randomUUID());
                 detail.setItemId(detailReq.getItemId());
                 detail.setTagNumber(detailReq.getTagNumber());
                 detail.setBookValue(detailReq.getBookValue());
@@ -66,6 +64,7 @@ public class FixedAssetTransferMapper {
               List<FixedAssetTransferDetailResponse> details = entity.getTransferDetails().stream()
                      .map(detail -> {
                           FixedAssetTransferDetailResponse detailResponse = new FixedAssetTransferDetailResponse();
+                          detailResponse.setId(detail.getId());
                           detailResponse.setItemId(detail.getItemId());
                           detailResponse.setTagNumber(detail.getTagNumber());
                           detailResponse.setBookValue(detail.getBookValue());
@@ -83,7 +82,8 @@ public class FixedAssetTransferMapper {
    }
     // for updating an existing entity
    public static void updateEntity(FixedAssetTransfer existing, FixedAssetTransferRequest request) {
-        existing.setEmployeeId(request.getEmployeeId());
+        existing.setId(UUID.randomUUID());
+       existing.setEmployeeId(request.getEmployeeId());
         existing.setDepartmentId(request.getDepartmentId());
         existing.setPreparedById(request.getPreparedById());
         existing.setTransferType(request.getTransferType());

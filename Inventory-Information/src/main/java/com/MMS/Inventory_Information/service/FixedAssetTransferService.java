@@ -10,6 +10,7 @@ import com.MMS.Inventory_Information.model.FixedAssetTransfer.FixedAssetTransfer
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -40,6 +41,7 @@ public class FixedAssetTransferService {
         return String.format("FixedAssetTransferNO-%03d/%d", nextNumber, currentYear);
     }
 
+  @Transactional
     public FixedAssetTransferResponse addFixedAssetTransfer(UUID tenantId, FixedAssetTransferRequest fixedAssetTransferRequest) {
         //Generate transfer number
         String transferNo = generateFixedAssetTransferNumber(tenantId);
@@ -83,19 +85,17 @@ public class FixedAssetTransferService {
         return FixedAssetTransferMapper.toResponse(fixedAssetTransfer);
     }
 
+    @Transactional
     public FixedAssetTransferResponse updateFixedAssetTransfer(UUID tenantId, UUID id, FixedAssetTransferRequest fixedAssetTransferRequest) {
-            //Fetch the existing transfer
         FixedAssetTransfer existingTransfer = fixedAssetTransferRepository
                 .findById(id)
                 .filter(transfer -> transfer.getTenantId().equals(tenantId))
                 .orElseThrow(() -> new RuntimeException("Fixed Asset Transfer not found with id: " + id));
 
-        //update only mutable fields
+        // update mutable fields
         FixedAssetTransferMapper.updateEntity(existingTransfer, fixedAssetTransferRequest);
-        // Handle the detail: replace all with new or updated items
 
-        fixedAssetTransferDetailRepository.deleteAllByFixedAssetTransferId(existingTransfer.getId());
-        // Create new details from the request
+        // Map and assign new details (Hibernate will handle orphan cleanup)
         List<FixedAssetTransferDetail> details = fixedAssetTransferRequest.getTransferDetails().stream().map(detail -> {
             FixedAssetTransferDetail entity = new FixedAssetTransferDetail();
             entity.setId(UUID.randomUUID());
@@ -110,14 +110,13 @@ public class FixedAssetTransferService {
             return entity;
         }).toList();
 
-        existingTransfer.setTransferDetails(details); // re-assign the list
+        existingTransfer.setTransferDetails(details);
 
-        // Save updated parent with new children
         FixedAssetTransfer saved = fixedAssetTransferRepository.save(existingTransfer);
-
         return FixedAssetTransferMapper.toResponse(saved);
-
     }
+
+
 
     public void deleteFixedAssetTransfer(UUID tenantId, UUID id) {
         FixedAssetTransfer fixedAssetTransfer = fixedAssetTransferRepository

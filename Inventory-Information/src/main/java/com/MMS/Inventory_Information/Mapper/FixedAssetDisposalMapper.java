@@ -1,39 +1,32 @@
 package com.MMS.Inventory_Information.Mapper;
 
-import com.MMS.Inventory_Information.dto.request.FixedAssetDisposalDetailRequest;
 import com.MMS.Inventory_Information.dto.request.FixedAssetDisposalRequest;
 import com.MMS.Inventory_Information.dto.response.FixedAssetDisposalDetailResponse;
 import com.MMS.Inventory_Information.dto.response.FixedAssetDisposalResponse;
 import com.MMS.Inventory_Information.model.FixedAssetDisposal.FixedAssetDisposal;
 import com.MMS.Inventory_Information.model.FixedAssetDisposal.FixedAssetDisposalDetail;
-import com.MMS.Inventory_Information.model.FixedAssetTransfer.FixedAssetTransferDetail;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class FixedAssetDisposalMapper {
          public static FixedAssetDisposal toEntity(FixedAssetDisposalRequest request) {
              FixedAssetDisposal entity = new FixedAssetDisposal();
-             entity.setId(UUID.randomUUID());
              entity.setTenantId(request.getTenantId());
              entity.setStoreId(request.getStoreId());
              entity.setProcessedById(request.getProcessedById());
-             entity.setFA_disposalNo(request.getFA_disposalNo());
+             entity.setFixedAssetDisposalNo(request.getFixedAssetDisposalNo());
              entity.setProcessedBy(request.getProcessedBy());
              entity.setApprovedDate(request.getApprovedDate());
              entity.setDisposalStatus(request.getDisposalStatus());
              entity.setProcessedOn(request.getProcessedOn());
              entity.setProposedDate(request.getProposedDate());
-             entity.setFileName(request.getFileName());
-             entity.setFileType(request.getFileType());
-             entity.setFileData(request.getFileData());
 
              if (request.getDisposalDetails() != null) {
                  List<FixedAssetDisposalDetail> details = request.getDisposalDetails().stream().map(detailRequest -> {
                      FixedAssetDisposalDetail detail = new FixedAssetDisposalDetail();
-                     detail.setId(UUID.randomUUID());
+
                      detail.setItemId(detailRequest.getItemId());
                      detail.setTagNumber(detailRequest.getTagNumber());
                      detail.setGainLossValueId(detailRequest.getGainLossValueId());
@@ -58,7 +51,7 @@ public class FixedAssetDisposalMapper {
                      response.setStoreId(entity.getStoreId());
                      response.setProcessedById(entity.getProcessedById());
                      response.setProcessedBy(entity.getProcessedBy());
-                     response.setFA_disposalNo(entity.getFA_disposalNo());
+                     response.setFixedAssetDisposalNo(entity.getFixedAssetDisposalNo());
                      response.setDisposalStatus(entity.getDisposalStatus());
                      response.setProcessedOn(entity.getProcessedOn());
                      response.setProposedDate(entity.getProposedDate());
@@ -82,7 +75,7 @@ public class FixedAssetDisposalMapper {
                         return detailResponse;
                   }).collect(Collectors.toList());
 
-                    response.setDisposalDetails(details);
+                    response.setDisposalDetailResponses(details);
 
               }
               return response;
@@ -97,9 +90,6 @@ public class FixedAssetDisposalMapper {
         entity.setDisposalStatus(request.getDisposalStatus());
         entity.setProcessedOn(request.getProcessedOn());
         entity.setProposedDate(request.getProposedDate());
-        entity.setFileName(request.getFileName());
-        entity.setFileType(request.getFileType());
-        entity.setFileData(request.getFileData());
         }
     }
 

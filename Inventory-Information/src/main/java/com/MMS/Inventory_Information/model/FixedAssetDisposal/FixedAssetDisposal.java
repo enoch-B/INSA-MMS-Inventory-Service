@@ -36,7 +36,8 @@ public class FixedAssetDisposal {
     private LocalDate processedOn; // Date when the disposal was processed
 
     @Column(nullable = false)
-    private String FA_disposalNo;
+    private String fixedAssetDisposalNo;
+
 
     @Column(nullable = false, updatable = false)
     private LocalDate proposedDate;
