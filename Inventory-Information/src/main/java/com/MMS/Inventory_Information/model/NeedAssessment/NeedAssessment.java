@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -26,11 +25,12 @@ public class NeedAssessment {
     private UUID tenantId;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PurchaseType purchaseType; // GOODS, SERVICE, WORK
 
     private UUID departmentId; // from department-service
     private UUID storeId; // from store-service
-    private String budgetYear;
+    private UUID budgetYearId;
 
 
     //Audit fields
@@ -55,5 +55,5 @@ public class NeedAssessment {
 
 
     @OneToMany(mappedBy = "needAssessment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<NeedAssessmentDetail> items;
+    private List<NeedAssessmentDetail> needAssessmentDetails;
 }

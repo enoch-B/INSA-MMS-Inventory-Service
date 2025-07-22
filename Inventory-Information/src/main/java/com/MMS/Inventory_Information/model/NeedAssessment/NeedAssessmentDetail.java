@@ -20,6 +20,6 @@ public class NeedAssessmentDetail {
 
     private UUID itemId;         // reference to item-service
 
-    private String generalLedger;  // snapshot
+    private UUID   generalLedgerId;  // snapshot
     private BigDecimal budgetAmount; // snapshot
 }
