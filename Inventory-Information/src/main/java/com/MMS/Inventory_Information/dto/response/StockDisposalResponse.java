@@ -20,7 +20,7 @@ public class StockDisposalResponse {
     private LocalDate proposedOn;
     private String fileName;
     private String fileType;
-    private Byte[] fileData;
+    private byte[] fileData;
 
     private List<StockDisposalDetailResponse> stockDisposalDetails;
 }

@@ -15,7 +15,6 @@ public class StockDisposalMapper {
 
     public static StockDisposal toEntity(StockDisposalRequest request) {
         StockDisposal entity = new StockDisposal();
-        entity.setId(UUID.randomUUID());
         entity.setTenantId(request.getTenantId());
         entity.setStoreId(request.getStoreId());
         entity.setProcessedById(request.getProcessedById());
@@ -32,7 +31,6 @@ public class StockDisposalMapper {
         if (request.getStockDisposalDetails() != null) {
             List<StockDisposalDetail> details = request.getStockDisposalDetails().stream().map(detailRequest -> {
                 StockDisposalDetail detail = new StockDisposalDetail();
-                detail.setId(UUID.randomUUID());
                 detail.setItemId(detailRequest.getItemId());
                 detail.setDisposalMethod(detailRequest.getDisposalMethod());
                 detail.setDescription(detailRequest.getDescription());

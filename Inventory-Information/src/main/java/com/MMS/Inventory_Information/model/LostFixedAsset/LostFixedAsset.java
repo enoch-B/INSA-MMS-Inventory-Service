@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
+@Data
 public class LostFixedAsset {
 
 
@@ -44,7 +44,7 @@ public class LostFixedAsset {
         private LocalDate processedOn;
 
 
-        private String filename;
+        private String fileName;
         private String fileType;
 
         @Lob
@@ -53,25 +53,24 @@ public class LostFixedAsset {
 
         @CreatedDate
         @Column(nullable = false, updatable = false)
-        private LocalDateTime createdAt;
+        private LocalDate createdAt;
 
         @LastModifiedDate
-        private LocalDateTime updatedAt;
+        private LocalDate updatedAt;
 
         @PrePersist
         protected void onCreate() {
-                this.createdAt = LocalDateTime.now();
-                this.updatedAt = LocalDateTime.now();
+                this.createdAt = LocalDate.now();
+                this.updatedAt = LocalDate.now();
         }
 
         @PreUpdate
         protected void onUpdate() {
-                this.updatedAt = LocalDateTime.now(); // Only update timestamp
+                this.updatedAt = LocalDate.now(); // Only update timestamp
         }
 
         @OneToMany(mappedBy = "lostFixedAsset", cascade = CascadeType.ALL, orphanRemoval = true)
         private List<LostItemDetail> lostItemDetails;
-
 
 
 }

@@ -43,7 +43,7 @@ public class StockDisposal {
 
     private String fileName;
     private String fileType;
-    private Byte [] fileData;
+    private byte[] fileData;
 
 
     //Auditing fields
