@@ -15,7 +15,6 @@ public class InventoryCountMapper {
 
     public static InventoryCount toEntity(InventoryCountRequest request){
         InventoryCount entity = new InventoryCount();
-         entity.setId(UUID.randomUUID());
          entity.setTenantId(request.getTenantId());
             entity.setStoreId(request.getStoreId());
             entity.setInventoryCountNumber(request.getInventoryCountNumber());
@@ -32,7 +31,6 @@ public class InventoryCountMapper {
             if (request.getInventoryItems() != null) {
                 List<InventoryDetail> details = request.getInventoryItems().stream().map(itemRequest -> {
                     InventoryDetail detail = new InventoryDetail();
-                    detail.setId(UUID.randomUUID());
                     detail.setItemId(itemRequest.getItemId());
                     detail.setQuantity(itemRequest.getQuantity());
                     detail.setRemark(itemRequest.getRemark());

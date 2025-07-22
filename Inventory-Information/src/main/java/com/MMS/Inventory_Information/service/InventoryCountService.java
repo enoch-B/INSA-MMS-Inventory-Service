@@ -58,27 +58,33 @@ public class InventoryCountService {
      *
      */
 
-    @Transactional
+     @Transactional
     public InventoryCountResponse createInventoryCount(UUID tenantId, InventoryCountRequest request) {
         String committeeName = committeeService.getCommitteeNameById(request.getCommitteeId());
         List<String> memberNames = employeeService.getEmployeeNamesByIds(request.getCommitteeMembersId());
         String inventoryCountNumber = generateInventoryCountNumber(tenantId);
-        //set the inventory count number and tenant ID
+
         request.setInventoryCountNumber(inventoryCountNumber);
         request.setTenantId(tenantId);
         request.setCommitteeName(committeeName);
         request.setCommitteeMembersName(memberNames);
-        // Map DTO to entity
+
+        // ✅ Map DTO to entity
         InventoryCount inventoryCount = InventoryCountMapper.toEntity(request);
 
-        //save the inventory count entity
+        // ✅ Link each detail to the parent count
+        if (inventoryCount.getInventoryDetails() != null) {
+            for (InventoryDetail detail : inventoryCount.getInventoryDetails()) {
+                detail.setInventoryCount(inventoryCount);  //  This is CRUCIAL
+            }
+        }
+
+        // ✅ Save parent and cascade children
         InventoryCount savedCount = inventoryCountRepository.save(inventoryCount);
-        // return the response DTO
 
         return InventoryCountMapper.toResponse(savedCount);
-
-
     }
+
 
     /**
      * Get a single inventory count by ID (mapped to response DTO).
@@ -120,7 +126,7 @@ public class InventoryCountService {
         inventoryCountRepository.delete(count);
     }
 
-    @Transactional
+ @Transactional
     public InventoryCountResponse updateInventoryCount(UUID tenantId, UUID id, InventoryCountRequest request) {
         InventoryCount existingCount = inventoryCountRepository.findById(id)
                 .filter(ic -> ic.getTenantId().equals(tenantId))

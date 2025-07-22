@@ -13,6 +13,6 @@ public interface InventoryCountDetailRepository extends JpaRepository<InventoryD
     List<InventoryDetail> findAllByInventoryCountId(UUID inventoryCountId);
 
     @Modifying
-    @Query("DELETE FROM InventoryDetail d WHERE d.inventoryCountNumber.id = :countId")
+    @Query("DELETE FROM InventoryDetail d WHERE d.inventoryCount.id = :countId")
     void deleteAllByInventoryCountId(@Param("countId") UUID countId);
 }

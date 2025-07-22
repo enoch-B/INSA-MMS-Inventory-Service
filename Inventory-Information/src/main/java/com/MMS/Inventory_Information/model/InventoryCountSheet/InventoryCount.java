@@ -19,9 +19,15 @@ import java.util.UUID;
 @Data
 
 public class InventoryCount {
+
+    @Version
+    private Integer version=0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
+
 
     private UUID tenantId;
 

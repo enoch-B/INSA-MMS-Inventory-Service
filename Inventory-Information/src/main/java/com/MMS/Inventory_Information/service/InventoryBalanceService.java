@@ -48,7 +48,6 @@ public class InventoryBalanceService {
             InventoryBalanceItem balanceItem = new InventoryBalanceItem();
             balanceItem.setId(UUID.randomUUID());
             balanceItem.setItemId(detail.getItemId()); // Reference to Item from item-service
-            balanceItem.setItemCode(detail.getItemCode());
             balanceItem.setQuantity(detail.getQuantity());
             balanceItem.setRemark(detail.getRemark());
             balanceItem.setInventoryBalance(inventoryBalance); // set relationship
