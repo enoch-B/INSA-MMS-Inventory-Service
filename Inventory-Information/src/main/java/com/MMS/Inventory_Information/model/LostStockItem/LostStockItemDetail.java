@@ -25,10 +25,6 @@ public class LostStockItemDetail {
 
     private UUID itemId;        // FK to item-service
 
-//    // Snapshot fields (optional but recommended for audit)
-//    private String itemName;
-//    private String itemCode;
-//    private BigDecimal unitPrice;
 
     private Integer Quantity;
 
