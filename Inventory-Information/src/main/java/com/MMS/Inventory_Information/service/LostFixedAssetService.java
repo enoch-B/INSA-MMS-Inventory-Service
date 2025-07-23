@@ -3,16 +3,14 @@ package com.MMS.Inventory_Information.service;
 
 import com.MMS.Inventory_Information.Mapper.LostFixedAssetMapper;
 import com.MMS.Inventory_Information.Repository.LostFixedAssetRepository;
-import com.MMS.Inventory_Information.Repository.LostItemDetailRepository;
+import com.MMS.Inventory_Information.Repository.LostFixedItemDetailRepository;
 import com.MMS.Inventory_Information.dto.request.LostFixedAssetRequest;
 import com.MMS.Inventory_Information.dto.response.LostFixedAssetResponse;
 import com.MMS.Inventory_Information.model.LostFixedAsset.LostFixedAsset;
-import com.MMS.Inventory_Information.model.LostFixedAsset.LostItemDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -23,7 +21,7 @@ import java.util.stream.Collectors;
 public class LostFixedAssetService {
 
     private final LostFixedAssetRepository lostFixedAssetRepository;
-    private final LostItemDetailRepository lostItemDetailRepository;
+    private final LostFixedItemDetailRepository lostFixedItemDetailRepository;
 
     public String generateLostItemNo(UUID tenantId) {
         int currentYear = LocalDate.now().getYear();
