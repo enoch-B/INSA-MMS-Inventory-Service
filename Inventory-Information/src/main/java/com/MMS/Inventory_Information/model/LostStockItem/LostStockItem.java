@@ -44,7 +44,7 @@ public class LostStockItem {
             joinColumns = @JoinColumn(name = "lost_stock_item_id") // ✅ Unique FK name
     )
     @Column(name = "member_id")
-    private List<UUID> committeeMemberIds;
+    private List<UUID> committeeMembersId;
 
     @ElementCollection
     @CollectionTable(
@@ -62,7 +62,7 @@ public class LostStockItem {
 
     // Relations
     @OneToMany(mappedBy = "lostStockItem", cascade = CascadeType.ALL)
-    private List<LostStockItemDetail> itemDetails;
+    private List<LostStockItemDetail> lostStockItemDetails;
 
     // File attachment
     private String fileName;

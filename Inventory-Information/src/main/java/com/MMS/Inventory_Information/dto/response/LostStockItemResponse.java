@@ -4,6 +4,7 @@ import com.MMS.Inventory_Information.model.LostStockItem.LostStockItemDetail;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,8 +38,8 @@ public class LostStockItemResponse {
     private String fileType;
     private byte[] data;
 
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     private List<LostStockItemDetailResponse> lostStockItemDetailResponses;
 }

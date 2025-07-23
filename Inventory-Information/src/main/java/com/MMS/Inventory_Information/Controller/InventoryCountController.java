@@ -35,8 +35,8 @@ public class InventoryCountController {
         return ResponseEntity.ok(response);
     }
 
-    // Suggested simpler path: /{tenantId} for paginated get-all
-    @GetMapping("/{tenantId}")
+    // Suggested simpler path: /{tenantId}/get-all for paginated get-all
+    @GetMapping("/{tenantId}/get-all")
     public ResponseEntity<Page<InventoryCountResponse>> getInventoryCountsPaginated(
             @PathVariable UUID tenantId,
             @RequestParam(defaultValue = "0") int page,
