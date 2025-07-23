@@ -59,7 +59,7 @@ public class LostStockItemController {
     public ResponseEntity<String> deleteLostStockItem(@PathVariable UUID tenantId,@PathVariable UUID id){
         lostStockItemService.deleteLostStockItem(tenantId,id);
 
-        return ResponseEntity.ok("Deleted Successfully")
+        return ResponseEntity.ok("Deleted Successfully");
     }
 
 }

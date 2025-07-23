@@ -71,7 +71,7 @@ public class LostStockItemService {
     }
 
     /*
-       Get all lost stock  item paginated
+       Get all lost stock item paginated
      */
     public Page<LostStockItemResponse> getAllLostStockItem(UUID tenantId, int page, int size) {
         Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
