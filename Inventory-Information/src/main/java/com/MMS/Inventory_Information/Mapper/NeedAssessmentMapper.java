@@ -67,6 +67,30 @@ public class NeedAssessmentMapper {
         }
 
 
+        // Handle Update
+
+    public static  void updateNeedAssessmentFromRequest(NeedAssessmentRequest request, NeedAssessment entity){
+        entity.setTenantId(request.getTenantId());
+        entity.setStoreId(request.getStoreId());
+        entity.setPurchaseType(request.getPurchaseType());
+        entity.setBudgetYearId(request.getBudgetYearId());
+        entity.setDepartmentId(request.getDepartmentId());
+
+        List<NeedAssessmentDetail> details = request.getAssessmentDetail().stream().map(detailRequest ->{
+            NeedAssessmentDetail detail = new NeedAssessmentDetail();
+            detail.setItemId(detailRequest.getItemId());
+            detail.setGeneralLedgerId(detailRequest.getGeneralLedger());
+            detail.setBudgetAmount(detailRequest.getBudgetAmount());
+            detail.setNeedAssessment(entity);
+
+
+            return detail;
+        }).toList();
+       entity.getNeedAssessmentDetails().clear();
+       entity.getNeedAssessmentDetails().addAll(details);
+    }
+
+
 
     }
 

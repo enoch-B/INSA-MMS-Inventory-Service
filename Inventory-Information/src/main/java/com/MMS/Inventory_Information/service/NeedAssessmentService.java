@@ -1,7 +1,6 @@
 package com.MMS.Inventory_Information.service;
 
 
-import com.MMS.Inventory_Information.Mapper.InventoryCountMapper;
 import com.MMS.Inventory_Information.Mapper.NeedAssessmentMapper;
 import com.MMS.Inventory_Information.Repository.NeedAssessmentDetailRepository;
 import com.MMS.Inventory_Information.Repository.NeedAssessmentRepository;
@@ -26,7 +25,6 @@ public class NeedAssessmentService {
 
     public NeedAssessmentResponse addNeedAssessment(UUID tenantId, NeedAssessmentRequest needAssessmentRequest) {
         NeedAssessment needAssessment = NeedAssessmentMapper.toEntity(needAssessmentRequest);
-
          NeedAssessment savedAssessment = needAssessmentRepository.save(needAssessment);
 
          return NeedAssessmentMapper.toResponse(savedAssessment);
@@ -40,5 +38,36 @@ public class NeedAssessmentService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         return needAssessmentRepository.findByTenantId(tenantId, pageable)
                 .map(NeedAssessmentMapper::toResponse);
+    }
+
+    /*
+     *  Get single Need Assessment By id
+     */
+
+    public NeedAssessmentResponse getNeedAssessmentById(UUID tenantId, UUID id) {
+        NeedAssessment needAssessment=needAssessmentRepository.findById(id)
+                .filter(na-> na.getTenantId().equals(tenantId))
+                .orElseThrow(()-> new RuntimeException("Need Assessment Not Found Or Tenant Mismatch"));
+        return NeedAssessmentMapper.toResponse(needAssessment);
+    }
+
+
+    public void deleteNeedAssessment(UUID tenantId, UUID id) {
+
+        NeedAssessment needAssessment = needAssessmentRepository.findById(id)
+                .filter(na-> na.getTenantId().equals(tenantId))
+                .orElseThrow(()-> new RuntimeException("Need Assessment Not Found or Tenant Mismatch"));
+
+        needAssessmentRepository.delete(needAssessment);
+    }
+
+    public NeedAssessment updateNeedAssessment(UUID tenantId, UUID id, NeedAssessmentRequest request) {
+        NeedAssessment existing = needAssessmentRepository.findById(id)
+                .filter(na->na.getTenantId().equals(tenantId))
+                .orElseThrow(()-> new RuntimeException("Need Assessment Not Found by this id" + id));
+
+        NeedAssessmentMapper.updateNeedAssessmentFromRequest(request,existing);
+
+       return needAssessmentRepository.save(existing);
     }
 }
