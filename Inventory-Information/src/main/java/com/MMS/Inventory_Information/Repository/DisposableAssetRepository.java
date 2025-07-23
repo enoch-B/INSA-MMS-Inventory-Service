@@ -13,9 +13,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface DisposableAssetRepository extends JpaRepository<DisposableAsset, UUID> {
-    @Query("SELECT da.drNo FROM DisposableAsset ic " +
+    @Query("SELECT da.drNo FROM DisposableAsset da " +
             "WHERE da.tenantId = :tenantId AND FUNCTION('YEAR', da.createdAt) = :currentYear " +
-            "ORDER BY ic.createdAt DESC")
+            "ORDER BY da.createdAt DESC")
     List<String> findRecentFADNumbers(UUID tenantId, @Param("year") int currentYear);
 
     Page<DisposableAsset> findByTenantId(UUID tenantId, Pageable pageable);

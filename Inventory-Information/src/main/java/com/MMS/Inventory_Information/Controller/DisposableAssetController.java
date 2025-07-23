@@ -38,6 +38,8 @@ public class DisposableAssetController {
     public ResponseEntity<DisposableAssetResponse> getDisposalCollectionById(@PathVariable UUID tenantId,@PathVariable UUID id){
 
         DisposableAssetResponse response = disposableAssetService.getDisposalCollectionById(tenantId,id);
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{tenantId}/delete/{id}")
