@@ -104,4 +104,18 @@ public class DisposableAssetService {
 
         disposableAssetRepository.delete(disposableAsset);
     }
+
+    public DisposableAssetResponse updateDisposableAsset(UUID tenantId, UUID id, DisposableAssetRequest disposableAssetRequest) {
+        DisposableAsset existing = disposableAssetRepository.findById(id)
+                .filter(da -> da.getTenantId().equals(tenantId))
+                .orElseThrow(() -> new RuntimeException("Disposable Asset Not Found by this id: " + id));
+
+        // Update the existing entity with the new request data
+        DisposableAssetMapper.updateDisposableAssetFromRequest(disposableAssetRequest, existing);
+
+        // Save the updated entity
+        DisposableAsset updatedAsset = disposableAssetRepository.save(existing);
+
+        return DisposableAssetMapper.toResponse(updatedAsset);
+    }
 }

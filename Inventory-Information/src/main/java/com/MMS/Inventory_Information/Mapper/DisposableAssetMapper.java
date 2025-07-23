@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class DisposableAssetMapper {
 
-    public static DisposableAsset toEntity(DisposableAssetRequest request){
+    public static DisposableAsset toEntity(DisposableAssetRequest request) {
         DisposableAsset entity = new DisposableAsset();
 
         entity.setTenantId(request.getTenantId());
@@ -25,8 +25,8 @@ public class DisposableAssetMapper {
         entity.setRequisitionDate(request.getRequisitionDate());
         entity.setProcessedOn(request.getProcessedOn());
 
-        if(request.getDisposableFixedAssetDetails() != null){
-            List<DisposableFixedAssetDetail> details = request.getDisposableFixedAssetDetails().stream().map(detailRequest ->{
+        if (request.getDisposableFixedAssetDetails() != null) {
+            List<DisposableFixedAssetDetail> details = request.getDisposableFixedAssetDetails().stream().map(detailRequest -> {
                 DisposableFixedAssetDetail detail = new DisposableFixedAssetDetail();
                 detail.setItemId(detailRequest.getItemId());
                 detail.setAccountCode(detailRequest.getAccountCode());
@@ -48,46 +48,81 @@ public class DisposableAssetMapper {
 
     }
 
-         //Map the entity to ResponseDto
+    //Map the entity to ResponseDto
 
-    public static DisposableAssetResponse toResponse(DisposableAsset entity){
-         DisposableAssetResponse response = new DisposableAssetResponse();
-         response.setId(entity.getId());
-         response.setTenantId(entity.getTenantId());
-         response.setStoreId(entity.getStoreId());
-         response.setDisposableType(entity.getDisposableType());
-         response.setDisposalStatus(entity.getDisposalStatus());
-         response.setDrNo(entity.getDrNo());
-         response.setProcessedById(entity.getProcessedById());
-         response.setProcessedByName(entity.getProcessedByName());
-         response.setProcessedOn(entity.getProcessedOn());
-         response.setDepartmentId(entity.getDepartmentId());
-         response.setCreatedAt(entity.getCreatedAt());
-         response.setUpdatedAt(entity.getUpdatedAt());
+    public static DisposableAssetResponse toResponse(DisposableAsset entity) {
+        DisposableAssetResponse response = new DisposableAssetResponse();
+        response.setId(entity.getId());
+        response.setTenantId(entity.getTenantId());
+        response.setStoreId(entity.getStoreId());
+        response.setDisposableType(entity.getDisposableType());
+        response.setDisposalStatus(entity.getDisposalStatus());
+        response.setDrNo(entity.getDrNo());
+        response.setProcessedById(entity.getProcessedById());
+        response.setProcessedByName(entity.getProcessedByName());
+        response.setProcessedOn(entity.getProcessedOn());
+        response.setDepartmentId(entity.getDepartmentId());
+        response.setCreatedAt(entity.getCreatedAt());
+        response.setUpdatedAt(entity.getUpdatedAt());
 
-         if(entity.getDisposableAssetDetail() != null){
-             List<DisposableFixedAssetDetailResponse> details= entity.getDisposableAssetDetail().stream().map(disposableFixedAssetDetail -> {
-                 DisposableFixedAssetDetailResponse detailResponse = new DisposableFixedAssetDetailResponse();
-                  detailResponse.setId(disposableFixedAssetDetail.getId());
-                  detailResponse.setItemId(disposableFixedAssetDetail.getItemId());
-                  detailResponse.setTagNumber(disposableFixedAssetDetail.getTagNumber());
-                  detailResponse.setBookValue(disposableFixedAssetDetail.getBookValue());
-                  detailResponse.setAccountCode(disposableFixedAssetDetail.getAccountCode());
-                  detailResponse.setBatchNo(disposableFixedAssetDetail.getBatchNo());
-                  detailResponse.setDescription(disposableFixedAssetDetail.getDescription());
-                  detailResponse.setQuantity(disposableFixedAssetDetail.getQuantity());
-                  detailResponse.setExpirationDate(disposableFixedAssetDetail.getExpirationDate());
+        if (entity.getDisposableAssetDetail() != null) {
+            List<DisposableFixedAssetDetailResponse> details = entity.getDisposableAssetDetail().stream().map(disposableFixedAssetDetail -> {
+                DisposableFixedAssetDetailResponse detailResponse = new DisposableFixedAssetDetailResponse();
+                detailResponse.setId(disposableFixedAssetDetail.getId());
+                detailResponse.setItemId(disposableFixedAssetDetail.getItemId());
+                detailResponse.setTagNumber(disposableFixedAssetDetail.getTagNumber());
+                detailResponse.setBookValue(disposableFixedAssetDetail.getBookValue());
+                detailResponse.setAccountCode(disposableFixedAssetDetail.getAccountCode());
+                detailResponse.setBatchNo(disposableFixedAssetDetail.getBatchNo());
+                detailResponse.setDescription(disposableFixedAssetDetail.getDescription());
+                detailResponse.setQuantity(disposableFixedAssetDetail.getQuantity());
+                detailResponse.setExpirationDate(disposableFixedAssetDetail.getExpirationDate());
 
-                  return detailResponse;
+                return detailResponse;
 
-             }).collect(Collectors.toList());
+            }).collect(Collectors.toList());
 
-             response.setDisposableFixedAssetDetails(details);
+            response.setDisposableFixedAssetDetails(details);
 
-         }
-         return response;
-
+        }
+        return response;
 
 
     }
-}
+
+    public static void updateDisposableAssetFromRequest(DisposableAssetRequest disposableAssetRequest, DisposableAsset existing) {
+
+        existing.setTenantId(disposableAssetRequest.getTenantId());
+        existing.setDisposableType(disposableAssetRequest.getDisposableType());
+        existing.setDisposalStatus(disposableAssetRequest.getDisposalStatus());
+        existing.setDrNo(disposableAssetRequest.getDrNo());
+        existing.setDepartmentId(disposableAssetRequest.getDepartmentId());
+        existing.setStoreId(disposableAssetRequest.getStoreId());
+        existing.setProcessedById(disposableAssetRequest.getProcessedById());
+        existing.setProcessedByName(disposableAssetRequest.getProcessedByName());
+        existing.setRequisitionDate(disposableAssetRequest.getRequisitionDate());
+        existing.setProcessedOn(disposableAssetRequest.getProcessedOn());
+
+        // Update details if they exist in the request
+            List<DisposableFixedAssetDetail> details = disposableAssetRequest.getDisposableFixedAssetDetails().stream().map(detailRequest -> {
+                DisposableFixedAssetDetail detail = new DisposableFixedAssetDetail();
+                detail.setItemId(detailRequest.getItemId());
+                detail.setAccountCode(detailRequest.getAccountCode());
+                detail.setTagNumber(detailRequest.getTagNumber());
+                detail.setBatchNo(detailRequest.getBatchNo());
+                detail.setBookValue(detailRequest.getBookValue());
+                detail.setDescription(detailRequest.getDescription());
+                detail.setExpirationDate(detailRequest.getExpirationDate());
+                detail.setQuantity(detailRequest.getQuantity());
+                detail.setDisposableAsset(existing);
+
+                return detail;
+
+            }).toList();
+            // Clear existing details and set new ones
+            existing.getDisposableAssetDetail().clear();
+            existing.getDisposableAssetDetail().addAll(details);
+
+        }
+    }
+
