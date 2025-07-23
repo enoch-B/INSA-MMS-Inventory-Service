@@ -107,8 +107,9 @@ public class LostStockItemService {
        update logic
      */
 
-    public LostStockItem updateLostStockItem(UUID id, LostStockItemRequest request, MultipartFile file) {
+    public LostStockItem updateLostStockItem(UUID id, UUID tenantId, LostStockItemRequest request, MultipartFile file) {
         LostStockItem existing = lostStockItemRepository.findById(id)
+                .filter(si -> si.getTenantId().equals(tenantId))
                 .orElseThrow(() -> new RuntimeException("LostStockItem not found"));
 
         LostStockItemMapper.updateLostStockItemFromRequest(request, file, existing);

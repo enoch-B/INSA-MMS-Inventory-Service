@@ -63,13 +63,14 @@ public class LostStockItemController {
         return ResponseEntity.ok("Deleted Successfully");
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/{tenantId}/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateLostStockItem(
+            @PathVariable UUID tenantId,
             @PathVariable UUID id,
             @RequestPart("request") LostStockItemRequest request,
             @RequestPart(value = "file", required = false) MultipartFile file) {
 
-        LostStockItem updated = lostStockItemService.updateLostStockItem(id, request, file);
+        LostStockItem updated = lostStockItemService.updateLostStockItem(tenantId,id, request, file);
         return ResponseEntity.ok(updated);
     }
 
