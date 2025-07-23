@@ -7,7 +7,9 @@ import com.MMS.Inventory_Information.dto.response.LostStockItemDetailResponse;
 import com.MMS.Inventory_Information.dto.response.LostStockItemResponse;
 import com.MMS.Inventory_Information.model.LostStockItem.LostStockItem;
 import com.MMS.Inventory_Information.model.LostStockItem.LostStockItemDetail;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -97,5 +99,51 @@ public class LostStockItemMapper {
         return response;
     }
 
+
+       //Update
+
+    public static void updateLostStockItemFromRequest(LostStockItemRequest request, MultipartFile file, LostStockItem entity) {
+        entity.setTenantId(request.getTenantId());
+        entity.setLostStockItemNo(request.getLostStockItemNo());
+        entity.setStatus(request.getStatus());
+        entity.setRegistrationDate(request.getRegistrationDate());
+        entity.setRegionId(request.getRegionId());
+        entity.setDepartmentId(request.getDepartmentId());
+        entity.setStoreId(request.getStoreId());
+        entity.setCommitteeId(request.getCommitteeId());
+        entity.setCommitteeName(request.getCommitteeName());
+        entity.setCommitteeMembersId(request.getCommitteeMembersId());
+        entity.setCommitteeMembersName(request.getCommitteeMembersName());
+        entity.setProcessedById(request.getProcessedById());
+        entity.setProcessedBy(request.getProcessedBy());
+        entity.setProcessedOn(request.getProcessedOn());
+
+        // Handle file upload
+        if (file != null && !file.isEmpty()) {
+            try {
+                entity.setFileName(file.getOriginalFilename());
+                entity.setFileType(file.getContentType());
+                entity.setData(file.getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to process uploaded file", e);
+            }
+        }
+
+        // Map detail list
+        List<LostStockItemDetail> details = request.getLostStockItemDetailRequest().stream()
+                .map(detailReq -> {
+                    LostStockItemDetail detail = new LostStockItemDetail();
+                    detail.setItemId(detailReq.getItemId());
+                    detail.setQuantity(detailReq.getQuantity());
+                    detail.setDescription(detailReq.getDescription());
+                    detail.setDuration(detailReq.getDuration());
+                    detail.setRemark(detailReq.getRemark());
+                    detail.setLostStockItem(entity); // Important!
+                    return detail;
+                }).toList();
+
+        entity.getLostStockItemDetails().clear();
+        entity.getLostStockItemDetails().addAll(details);
+    }
 
 }

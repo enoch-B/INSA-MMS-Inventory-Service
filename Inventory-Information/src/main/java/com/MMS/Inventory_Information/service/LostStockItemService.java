@@ -27,6 +27,9 @@ public class LostStockItemService {
       private final LostStockItemRepository lostStockItemRepository;
       private final LostStockItemDetailRepository lostStockItemDetailRepository;
 
+        /*
+           // Format: StockLostItemNo-001/2025
+         */
     public String generateLostStockItemNo(UUID tenantId) {
         int currentYear = LocalDate.now().getYear();
         List<String> recentNumbers = lostStockItemRepository.findRecentLostStockItemNo(tenantId, currentYear);
@@ -82,12 +85,15 @@ public class LostStockItemService {
 
     public LostStockItemResponse getLostStockItemById(UUID tenantId, UUID id) {
         LostStockItem lostStockItem = lostStockItemRepository.findById(id)
-                .filter(si -> si.getTenantId().equals("tenantId"))
+                .filter(si -> si.getTenantId().equals(tenantId))
                 .orElseThrow(() -> new RuntimeException("LostStock Item Not Found or tenant Mismatch"));
 
         return LostStockItemMapper.toResponse(lostStockItem);
     }
 
+   /*
+        delete lost stock item
+    */
     public void deleteLostStockItem(UUID tenantId, UUID id) {
 
         LostStockItem lostStockItem= lostStockItemRepository.findById(id)
@@ -95,5 +101,18 @@ public class LostStockItemService {
                 .orElseThrow( () -> new RuntimeException("Item Not found or tenant mismatch"));
 
         lostStockItemRepository.delete(lostStockItem);
+    }
+
+    /*
+       update logic
+     */
+
+    public LostStockItem updateLostStockItem(UUID id, LostStockItemRequest request, MultipartFile file) {
+        LostStockItem existing = lostStockItemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("LostStockItem not found"));
+
+        LostStockItemMapper.updateLostStockItemFromRequest(request, file, existing);
+
+        return lostStockItemRepository.save(existing);
     }
 }

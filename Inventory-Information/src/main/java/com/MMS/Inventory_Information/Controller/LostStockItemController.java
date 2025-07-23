@@ -4,6 +4,7 @@ package com.MMS.Inventory_Information.Controller;
 import com.MMS.Inventory_Information.dto.request.FixedAssetDisposalRequest;
 import com.MMS.Inventory_Information.dto.request.LostStockItemRequest;
 import com.MMS.Inventory_Information.dto.response.LostStockItemResponse;
+import com.MMS.Inventory_Information.model.LostStockItem.LostStockItem;
 import com.MMS.Inventory_Information.service.LostStockItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,7 @@ import java.util.UUID;
 public class LostStockItemController {
     private final LostStockItemService lostStockItemService;
 
-    @PostMapping(value="/{tenantId}/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value="/{tenantId}/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LostStockItemResponse> addLostStockItem(@PathVariable UUID tenantId,  @RequestPart("request") LostStockItemRequest request,
                                                                   @RequestPart(value = "file", required = false) MultipartFile file){
 
@@ -60,6 +61,16 @@ public class LostStockItemController {
         lostStockItemService.deleteLostStockItem(tenantId,id);
 
         return ResponseEntity.ok("Deleted Successfully");
+    }
+
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateLostStockItem(
+            @PathVariable UUID id,
+            @RequestPart("request") LostStockItemRequest request,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+
+        LostStockItem updated = lostStockItemService.updateLostStockItem(id, request, file);
+        return ResponseEntity.ok(updated);
     }
 
 }
