@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 public class FixedAssetDisposalMapper {
          public static FixedAssetDisposal toEntity(FixedAssetDisposalRequest request) {
              FixedAssetDisposal entity = new FixedAssetDisposal();
@@ -38,7 +40,7 @@ public class FixedAssetDisposalMapper {
                      detail.setFixedAssetDisposal(entity);
                      return detail;
 
-                 }).collect(Collectors.toList());
+                 }).collect(toList());
                     entity.setDisposalDetails(details);
              }
            return entity;
@@ -73,7 +75,7 @@ public class FixedAssetDisposalMapper {
                         detailResponse.setDisposalMethod(detail.getDisposalMethod());
 
                         return detailResponse;
-                  }).collect(Collectors.toList());
+                  }).collect(toList());
 
                     response.setDisposalDetailResponses(details);
 
@@ -90,6 +92,24 @@ public class FixedAssetDisposalMapper {
         entity.setDisposalStatus(request.getDisposalStatus());
         entity.setProcessedOn(request.getProcessedOn());
         entity.setProposedDate(request.getProposedDate());
+
+        List<FixedAssetDisposalDetail> details = request.getDisposalDetails().stream().map(detailRequest -> {
+            FixedAssetDisposalDetail detail = new FixedAssetDisposalDetail();
+
+            detail.setItemId(detailRequest.getItemId());
+            detail.setTagNumber(detailRequest.getTagNumber());
+            detail.setGainLossValueId(detailRequest.getGainLossValueId());
+            detail.setSellingPriceId(detailRequest.getSellingPriceId());
+            detail.setAccountCode(detailRequest.getAccountCode());
+            detail.setBookValue(detailRequest.getBookValue());
+            detail.setItemLocation(detailRequest.getItemLocation());
+            detail.setDisposalMethod(detailRequest.getDisposalMethod());
+            detail.setFixedAssetDisposal(entity);
+            return detail;
+
+        }).toList();
+          entity.getDisposalDetails().clear();
+          entity.getDisposalDetails().addAll(details);
         }
     }
 

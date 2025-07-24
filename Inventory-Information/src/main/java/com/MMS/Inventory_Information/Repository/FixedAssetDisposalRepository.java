@@ -1,6 +1,9 @@
 package com.MMS.Inventory_Information.Repository;
 
+import com.MMS.Inventory_Information.dto.response.FixedAssetDisposalResponse;
 import com.MMS.Inventory_Information.model.FixedAssetDisposal.FixedAssetDisposal;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,7 +18,9 @@ public interface FixedAssetDisposalRepository extends JpaRepository<FixedAssetDi
             "ORDER BY t.createdAt DESC")
     List<String> findRecentDisposalNumbers(UUID tenantId, int currentYear);
 
-    List<FixedAssetDisposal> findAllByTenantId(UUID tenantId);
 
     Optional<FixedAssetDisposal> findByTenantIdAndFixedAssetDisposalNo(UUID tenantId, String disposalNumber);
+
+    Page<FixedAssetDisposal> findByTenantId(UUID tenantId, Pageable pageable);
+
 }

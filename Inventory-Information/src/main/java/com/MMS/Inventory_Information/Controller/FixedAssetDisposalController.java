@@ -4,8 +4,11 @@ import com.MMS.Inventory_Information.dto.request.FixedAssetDisposalRequest;
 import com.MMS.Inventory_Information.dto.response.FixedAssetDisposalResponse;
 import com.MMS.Inventory_Information.service.FixedAssetDisposalService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +22,7 @@ public class FixedAssetDisposalController {
 
     private final FixedAssetDisposalService fixedAssetDisposalService;
 
-    // 🔄 POST - with multipart support
+    //  POST - with multipart support
     @PostMapping(value = "/{tenantId}/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public FixedAssetDisposalResponse addFixedAssetDisposal(
@@ -30,23 +33,35 @@ public class FixedAssetDisposalController {
         return fixedAssetDisposalService.addFixedAssetDisposal(tenantId, request, file);
     }
 
-    // 🔄 PUT - with multipart support
+    //  PUT - with multipart support
     @PutMapping(value = "/{tenantId}/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public FixedAssetDisposalResponse updateFixedAssetDisposal(
+    public ResponseEntity<?> updateFixedAssetDisposal(
             @PathVariable UUID tenantId,
             @PathVariable UUID id,
             @RequestPart("request") FixedAssetDisposalRequest request,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
-        return fixedAssetDisposalService.updateFixedAssetDisposal(tenantId, id, request, file);
+        FixedAssetDisposalResponse response= fixedAssetDisposalService.updateFixedAssetDisposal(tenantId, id, request, file);
+
+        return ResponseEntity.ok(response);
     }
 
+
+
+    /*
+    *   Get all Fixed Asset Disposal paginated
+     */
     @GetMapping("/{tenantId}/get-all")
-    @ResponseStatus(HttpStatus.OK)
-    public List<FixedAssetDisposalResponse> getAllFixedAssetDisposals(@PathVariable UUID tenantId) {
-        return fixedAssetDisposalService.getAllFixedAssetDisposals(tenantId);
+    public ResponseEntity<?> getAllFixedAssetDisposal(@PathVariable UUID tenantId,
+                                                      @RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "10") int size){
+        Page<FixedAssetDisposalResponse> response=fixedAssetDisposalService.getAllFixedAssetDisposal(tenantId,page,size);
+
+        return ResponseEntity.ok(response);
     }
+
+
 
     @GetMapping("/{tenantId}/get/{id}")
     @ResponseStatus(HttpStatus.OK)

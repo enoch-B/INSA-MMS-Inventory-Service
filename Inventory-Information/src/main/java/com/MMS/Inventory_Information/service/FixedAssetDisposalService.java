@@ -9,6 +9,10 @@ import com.MMS.Inventory_Information.model.FixedAssetDisposal.FixedAssetDisposal
 import com.MMS.Inventory_Information.model.FixedAssetDisposal.FixedAssetDisposalDetail;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -68,15 +72,17 @@ public class FixedAssetDisposalService {
 
     }
 
-    public List<FixedAssetDisposalResponse> getAllFixedAssetDisposals(UUID tenantId) {
-        // Fetch all fixed asset disposals for the given tenant
-        List<FixedAssetDisposal> disposals = fixedAssetDisposalRepository.findAllByTenantId(tenantId);
-        // Map the entities to response DTOs
-        return disposals.stream()
-                .map(FixedAssetDisposalMapper::toResponse)
-                .toList();
+    /*
+    * get all paginated fixed asset disposal
+    */
 
+    public Page<FixedAssetDisposalResponse> getAllFixedAssetDisposal(UUID tenantId, int page, int size) {
+        Pageable pageable= PageRequest.of(page,size, Sort.by("createdAt").descending());
+
+        return fixedAssetDisposalRepository.findByTenantId(tenantId,pageable)
+                .map(FixedAssetDisposalMapper::toResponse);
     }
+
 
     public FixedAssetDisposalResponse getFixedAssetDisposalById(UUID tenantId, UUID id) {
         // Fetch the fixed asset disposal by ID
@@ -120,27 +126,7 @@ public class FixedAssetDisposalService {
         }
 
         // Handle disposal details: remove existing and add new
-        fixedAssetDisposalDetailRepository.deleteAllByFixedAssetDisposalId(existingDisposal.getId());
-
-        List<FixedAssetDisposalDetail> details = request.getDisposalDetails().stream().map(detail -> {
-            FixedAssetDisposalDetail entity = new FixedAssetDisposalDetail();
-            entity.setId(UUID.randomUUID());
-            entity.setItemId(detail.getItemId());
-            entity.setTagNumber(detail.getTagNumber());
-            entity.setGainLossValueId(detail.getGainLossValueId());
-            entity.setSellingPriceId(detail.getSellingPriceId());
-            entity.setAccountCode(detail.getAccountCode());
-            entity.setBookValue(detail.getBookValue());
-            entity.setItemLocation(detail.getItemLocation());
-            entity.setDisposalMethod(detail.getDisposalMethod());
-            entity.setFixedAssetDisposal(existingDisposal);
-            return entity;
-        }).toList();
-
-        existingDisposal.setDisposalDetails(details);
-
-        // Save the updated entity
-        FixedAssetDisposal updatedEntity = fixedAssetDisposalRepository.save(existingDisposal);
+       FixedAssetDisposal updatedEntity=fixedAssetDisposalRepository.save(existingDisposal);
 
         // Return the response DTO
         return FixedAssetDisposalMapper.toResponse(updatedEntity);
@@ -155,4 +141,5 @@ public class FixedAssetDisposalService {
         fixedAssetDisposalRepository.delete(fixedAssetDisposal);
 
     }
+
 }
