@@ -21,6 +21,7 @@ public class NeedAssessmentController {
 
     @PostMapping("/{tenantId}/add")
     public ResponseEntity<NeedAssessmentResponse> addNeedAssessment(@PathVariable UUID tenantId, @RequestBody NeedAssessmentRequest needAssessmentRequest) {
+        //set tenant id
 
         NeedAssessmentResponse response = needAssessmentService.addNeedAssessment(tenantId, needAssessmentRequest);
 
@@ -64,7 +65,7 @@ public class NeedAssessmentController {
     @PutMapping("/{tenantId}/update/{id}")
     public ResponseEntity<?> updateNeedAssessment(@PathVariable UUID tenantId, @PathVariable UUID id,
                                                   @RequestBody NeedAssessmentRequest request ){
-        NeedAssessment updated= needAssessmentService.updateNeedAssessment(tenantId,id,request);
+        NeedAssessmentResponse updated= needAssessmentService.updateNeedAssessment(tenantId,id,request);
 
         return ResponseEntity.ok(updated);
     }

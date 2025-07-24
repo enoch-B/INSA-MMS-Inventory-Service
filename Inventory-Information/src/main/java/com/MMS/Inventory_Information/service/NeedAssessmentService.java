@@ -24,6 +24,9 @@ public class NeedAssessmentService {
     private final NeedAssessmentDetailRepository needAssessmentDetailRepository;
 
     public NeedAssessmentResponse addNeedAssessment(UUID tenantId, NeedAssessmentRequest needAssessmentRequest) {
+
+         needAssessmentRequest.setTenantId(tenantId);
+
         NeedAssessment needAssessment = NeedAssessmentMapper.toEntity(needAssessmentRequest);
          NeedAssessment savedAssessment = needAssessmentRepository.save(needAssessment);
 
@@ -61,13 +64,15 @@ public class NeedAssessmentService {
         needAssessmentRepository.delete(needAssessment);
     }
 
-    public NeedAssessment updateNeedAssessment(UUID tenantId, UUID id, NeedAssessmentRequest request) {
+    public NeedAssessmentResponse updateNeedAssessment(UUID tenantId, UUID id, NeedAssessmentRequest request) {
         NeedAssessment existing = needAssessmentRepository.findById(id)
                 .filter(na->na.getTenantId().equals(tenantId))
                 .orElseThrow(()-> new RuntimeException("Need Assessment Not Found by this id" + id));
 
         NeedAssessmentMapper.updateNeedAssessmentFromRequest(request,existing);
 
-       return needAssessmentRepository.save(existing);
+         NeedAssessment saved=needAssessmentRepository.save(existing);
+
+         return NeedAssessmentMapper.toResponse(saved);
     }
 }

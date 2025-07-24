@@ -70,7 +70,6 @@ public class NeedAssessmentMapper {
         // Handle Update
 
     public static  void updateNeedAssessmentFromRequest(NeedAssessmentRequest request, NeedAssessment entity){
-        entity.setTenantId(request.getTenantId());
         entity.setStoreId(request.getStoreId());
         entity.setPurchaseType(request.getPurchaseType());
         entity.setBudgetYearId(request.getBudgetYearId());
