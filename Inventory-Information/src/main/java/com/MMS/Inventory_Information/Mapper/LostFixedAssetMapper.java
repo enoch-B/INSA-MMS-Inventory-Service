@@ -80,17 +80,34 @@ public class LostFixedAssetMapper {
 
         }
 
-        public void updateEntity(LostFixedAsset entity, LostFixedAssetRequest request) {
-            entity.setStoreId(request.getStoreId());
-            entity.setDepartmentId(request.getDepartmentId());
-            entity.setProcessedById(request.getProcessedById());
-            entity.setLostItemNo(request.getLostItemNo());
-            entity.setRegistrationDate(request.getRegistrationDate());
-            entity.setProcessedBy(request.getProcessedBy());
-            entity.setProcessedOn(request.getProcessedOn());
-            entity.setFileType(request.getFileType());
-            entity.setFileName(request.getFileName());
-            entity.setData(request.getData());
+        public static void updateLostFixedAsset(LostFixedAsset existing, LostFixedAssetRequest request) {
+            existing.setStoreId(request.getStoreId());
+            existing.setDepartmentId(request.getDepartmentId());
+            existing.setProcessedById(request.getProcessedById());
+            existing.setLostItemNo(request.getLostItemNo());
+            existing.setRegistrationDate(request.getRegistrationDate());
+            existing.setProcessedBy(request.getProcessedBy());
+            existing.setProcessedOn(request.getProcessedOn());
+            existing.setFileType(request.getFileType());
+            existing.setFileName(request.getFileName());
+            existing.setData(request.getData());
+
+            List<LostItemDetail> details = request.getLostItemDetails().stream().map(detailRequest -> {
+                LostItemDetail detail = new LostItemDetail();
+                detail.setItemId(detailRequest.getItemId());
+                detail.setTagNo(detailRequest.getTagNo());
+                detail.setBookValue(detailRequest.getBookValue());
+                detail.setAccountCode(detailRequest.getAccountCode());
+                detail.setDuration(detailRequest.getDuration());
+                detail.setDescription(detailRequest.getDescription());
+                detail.setRemark(detailRequest.getRemark());
+                detail.setLostFixedAsset(existing);
+                return detail;
+
+            }).toList();
+
+            existing.getLostItemDetails().clear();
+            existing.getLostItemDetails().addAll(details);
 
         }
 

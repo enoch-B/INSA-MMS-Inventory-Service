@@ -8,6 +8,10 @@ import com.MMS.Inventory_Information.dto.request.LostFixedAssetRequest;
 import com.MMS.Inventory_Information.dto.response.LostFixedAssetResponse;
 import com.MMS.Inventory_Information.model.LostFixedAsset.LostFixedAsset;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -59,13 +63,37 @@ public class LostFixedAssetService {
 
     }
 
-    public List<LostFixedAssetResponse> getAllLostFixedAssets(UUID tenantId) {
-        // Fetch only the LostFixedAsset entities for the given tenantId (filtered in DB query)
-        List<LostFixedAsset> lostFixedAssets = lostFixedAssetRepository.findByTenantId(tenantId);
 
-        // Map entities to DTO responses
-        return lostFixedAssets.stream()
-                .map(LostFixedAssetMapper::toResponse)
-                .collect(Collectors.toList());
+    public Page<LostFixedAssetResponse> getAllLostFixedAssets(UUID tenantId, int page, int size) {
+        Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
+
+        return lostFixedAssetRepository.findByTenantId(tenantId,pageable)
+                .map(LostFixedAssetMapper::toResponse);
+    }
+
+    public LostFixedAssetResponse getLostFixedAssetById(UUID tenantId, UUID id) {
+        LostFixedAsset lostFixedAsset= lostFixedAssetRepository.findById(id)
+                .filter(la->la.getTenantId().equals(tenantId))
+                .orElseThrow(()->new RuntimeException("LostFixed Asset Not Found By this id" + id));
+
+        return LostFixedAssetMapper.toResponse(lostFixedAsset);
+    }
+
+    public LostFixedAsset updateLostFixedAsset(UUID tenantId, UUID id, LostFixedAssetRequest request) {
+        LostFixedAsset existing = lostFixedAssetRepository.findById(id)
+                .filter(la->la.getTenantId().equals(tenantId))
+                .orElseThrow(()->new RuntimeException("The Item Not Found By This Id" + id));
+
+        LostFixedAssetMapper.updateLostFixedAsset(existing,request);
+
+        return lostFixedAssetRepository.save(existing);
+    }
+
+    public void deleteLostFixedAsset(UUID tenantId, UUID id) {
+        LostFixedAsset lostFixedAsset=lostFixedAssetRepository.findById(id)
+                .filter(la->la.getTenantId().equals(tenantId))
+                .orElseThrow(()-> new RuntimeException("Item Not Found or Tenant Mismatch"));
+
+        lostFixedAssetRepository.delete(lostFixedAsset);
     }
 }
