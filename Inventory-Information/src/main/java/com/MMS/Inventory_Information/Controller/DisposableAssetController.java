@@ -48,6 +48,7 @@ public class DisposableAssetController {
 
         return ResponseEntity.ok("Deleted Successfully");
     }
+
     @PutMapping("/{tenantId}/update/{id}")
     public ResponseEntity<DisposableAssetResponse> updateDisposableAsset(@PathVariable UUID tenantId, @PathVariable UUID id, @RequestBody DisposableAssetRequest disposableAssetRequest) {
         DisposableAssetResponse response = disposableAssetService.updateDisposableAsset(tenantId, id, disposableAssetRequest);
