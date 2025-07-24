@@ -81,17 +81,31 @@ public class FixedAssetTransferMapper {
          return response;
    }
     // for updating an existing entity
-   public static void updateEntity(FixedAssetTransfer existing, FixedAssetTransferRequest request) {
-        existing.setId(UUID.randomUUID());
-       existing.setEmployeeId(request.getEmployeeId());
-        existing.setDepartmentId(request.getDepartmentId());
-        existing.setPreparedById(request.getPreparedById());
-        existing.setTransferType(request.getTransferType());
-        existing.setTransferFromId(request.getTransferFromId());
-        existing.setTransferToId(request.getTransferToId());
-        existing.setProcessedBy(request.getProcessedBy());
-        existing.setProcessedOn(request.getProcessedOn());
+   public static void updateEntity(FixedAssetTransfer entity, FixedAssetTransferRequest request) {
+       entity.setEmployeeId(request.getEmployeeId());
+        entity.setDepartmentId(request.getDepartmentId());
+        entity.setPreparedById(request.getPreparedById());
+        entity.setTransferType(request.getTransferType());
+        entity.setTransferFromId(request.getTransferFromId());
+        entity.setTransferToId(request.getTransferToId());
+        entity.setProcessedBy(request.getProcessedBy());
+        entity.setProcessedOn(request.getProcessedOn());
         // Note: You do NOT update transferNo, createdAt, etc.
+       List<FixedAssetTransferDetail> details = request.getTransferDetails().stream().map(detailReq ->{
+           FixedAssetTransferDetail detail = new FixedAssetTransferDetail();
+           detail.setItemId(detailReq.getItemId());
+           detail.setTagNumber(detailReq.getTagNumber());
+           detail.setBookValue(detailReq.getBookValue());
+           detail.setAccountCode(detailReq.getAccountCode());
+           detail.setQuantity(detailReq.getQuantity());
+           detail.setRemark(detailReq.getRemark());
+           detail.setDescription(detailReq.getDescription());
+           detail.setFixedAssetTransfer(entity);
+           return detail;
+       }).toList();
+
+       entity.getTransferDetails().clear();
+       entity.getTransferDetails().addAll(details);
     }
 
 

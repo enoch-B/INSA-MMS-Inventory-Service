@@ -1,6 +1,8 @@
 package com.MMS.Inventory_Information.Repository;
 
 import com.MMS.Inventory_Information.model.FixedAssetTransfer.FixedAssetTransfer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,7 +21,7 @@ public interface FixedAssetTransferRepository extends JpaRepository<FixedAssetTr
             "ORDER BY t.createdAt DESC")
 
     List<String> findRecentTransferNumbers(UUID tenantId, @Param("year") int currentYear);
-    List<FixedAssetTransfer> findByTenantId(UUID tenantId);
+    Page<FixedAssetTransfer> findByTenantId(UUID tenantId, Pageable pageable);
     Optional<FixedAssetTransfer> findByTenantIdAndTransferNo(UUID tenantId, String transferNumber);
 
 

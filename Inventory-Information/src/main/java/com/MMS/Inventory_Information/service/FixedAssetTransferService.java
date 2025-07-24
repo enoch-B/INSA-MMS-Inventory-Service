@@ -9,6 +9,10 @@ import com.MMS.Inventory_Information.model.FixedAssetTransfer.FixedAssetTransfer
 import com.MMS.Inventory_Information.model.FixedAssetTransfer.FixedAssetTransferDetail;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,13 +64,14 @@ public class FixedAssetTransferService {
 
     }
 
-    public List<FixedAssetTransferResponse> getAllFixedAssetTransfers(UUID tenantId) {
-        List<FixedAssetTransfer> fixedAssetTransfers = fixedAssetTransferRepository.findByTenantId(tenantId);
 
-        return fixedAssetTransfers.stream()
-                .map(FixedAssetTransferMapper::toResponse) // Make sure this exists
-                .collect(Collectors.toList());
+    public Page<FixedAssetTransferResponse> getAllFixedAssetTransfer(UUID tenantId, int page, int size) {
+        Pageable pageable= PageRequest.of(page,size, Sort.by("createdAt").descending());
+
+        return fixedAssetTransferRepository.findByTenantId(tenantId,pageable)
+                .map(FixedAssetTransferMapper::toResponse);
     }
+
 
     public FixedAssetTransferResponse getFixedAssetTransferById(UUID tenantId, UUID id) {
         FixedAssetTransfer fixedAssetTransfer = fixedAssetTransferRepository
@@ -86,36 +91,18 @@ public class FixedAssetTransferService {
     }
 
     @Transactional
-    public FixedAssetTransferResponse updateFixedAssetTransfer(UUID tenantId, UUID id, FixedAssetTransferRequest fixedAssetTransferRequest) {
+    public FixedAssetTransferResponse updateFixedAssetTransfer(UUID tenantId, UUID id, FixedAssetTransferRequest request) {
         FixedAssetTransfer existingTransfer = fixedAssetTransferRepository
                 .findById(id)
                 .filter(transfer -> transfer.getTenantId().equals(tenantId))
                 .orElseThrow(() -> new RuntimeException("Fixed Asset Transfer not found with id: " + id));
 
         // update mutable fields
-        FixedAssetTransferMapper.updateEntity(existingTransfer, fixedAssetTransferRequest);
-
-        // Map and assign new details (Hibernate will handle orphan cleanup)
-        List<FixedAssetTransferDetail> details = fixedAssetTransferRequest.getTransferDetails().stream().map(detail -> {
-            FixedAssetTransferDetail entity = new FixedAssetTransferDetail();
-            entity.setId(UUID.randomUUID());
-            entity.setItemId(detail.getItemId());
-            entity.setTagNumber(detail.getTagNumber());
-            entity.setBookValue(detail.getBookValue());
-            entity.setAccountCode(detail.getAccountCode());
-            entity.setQuantity(detail.getQuantity());
-            entity.setRemark(detail.getRemark());
-            entity.setDescription(detail.getDescription());
-            entity.setFixedAssetTransfer(existingTransfer);
-            return entity;
-        }).toList();
-
-        existingTransfer.setTransferDetails(details);
+        FixedAssetTransferMapper.updateEntity(existingTransfer, request);
 
         FixedAssetTransfer saved = fixedAssetTransferRepository.save(existingTransfer);
         return FixedAssetTransferMapper.toResponse(saved);
     }
-
 
 
     public void deleteFixedAssetTransfer(UUID tenantId, UUID id) {
@@ -126,4 +113,5 @@ public class FixedAssetTransferService {
 
          fixedAssetTransferRepository.delete(fixedAssetTransfer);
     }
+
 }
