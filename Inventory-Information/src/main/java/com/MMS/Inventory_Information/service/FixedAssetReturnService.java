@@ -56,14 +56,16 @@ public class FixedAssetReturnService {
     }
 
     public FixedAssetReturnResponse updateFixedAssetReturn(UUID tenantId, UUID id, FixedAssetReturnRequest request) {
-        FixedAssetReturn fixedAssetReturn = fixedAssetReturnRepository.findById(id)
+        FixedAssetReturn existingReturn = fixedAssetReturnRepository.findById(id)
                 .filter(far -> far.getTenantId().equals(tenantId))
                 .orElseThrow(() -> new RuntimeException("Fixed Asset Return Not Found or Tenant Mismatch"));
+
         // Update fields from request
 
+         FixedAssetReturnMapper.updateFixedAssetReturn(existingReturn,request);
 
         // Save updated entity
-        FixedAssetReturn updatedEntity = fixedAssetReturnRepository.save(fixedAssetReturn);
+        FixedAssetReturn updatedEntity = fixedAssetReturnRepository.save(existingReturn);
 
         // Convert to response
         return FixedAssetReturnMapper.toResponse(updatedEntity);

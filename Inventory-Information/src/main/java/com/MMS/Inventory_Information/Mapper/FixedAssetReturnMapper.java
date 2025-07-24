@@ -1,5 +1,6 @@
 package com.MMS.Inventory_Information.Mapper;
 
+import com.MMS.Inventory_Information.dto.request.FixedAssetDisposalRequest;
 import com.MMS.Inventory_Information.dto.request.FixedAssetReturnRequest;
 import com.MMS.Inventory_Information.dto.response.FixedAssetReturnDetailResponse;
 import com.MMS.Inventory_Information.dto.response.FixedAssetReturnResponse;
@@ -77,5 +78,35 @@ public class FixedAssetReturnMapper {
         }
 
         return response;
+    }
+
+    public static  void updateFixedAssetReturn(FixedAssetReturn entity, FixedAssetReturnRequest request){
+
+        entity.setTenantId(request.getTenantId());
+        entity.setDepartmentId(request.getDepartmentId());
+        entity.setStoreId(request.getStoreId());
+        entity.setProcessedById(request.getProcessedById());
+        entity.setReturnedById(request.getReturnedById());
+        entity.setProcessedBy(request.getProcessedBy());
+        entity.setReturnedBy(request.getReturnedBy());
+        entity.setStatus(request.getStatus());
+        entity.setReceivedDate(request.getReceivedDate());
+        entity.setReturnedDate(request.getReturnedDate());
+        entity.setProcessedOn(request.getProcessedOn());
+
+            List<FixedAssetReturnDetail> details = request.getReturnDetails().stream().map(detailReq -> {
+                FixedAssetReturnDetail detail = new FixedAssetReturnDetail();
+                detail.setItemId(detailReq.getItemId());
+                detail.setItemStatus(detailReq.getItemStatus());
+                detail.setBookValue(detailReq.getBookValue());
+                detail.setAccountCode(detailReq.getAccountCode());
+                detail.setTagNumber(detailReq.getTagNumber());
+                detail.setDescription(detailReq.getDescription());
+                detail.setFixedAssetReturn(entity); // Link to parent
+                return detail;
+            }).toList();
+
+            entity.getReturnDetails().clear();
+            entity.getReturnDetails().addAll(details);
     }
 }
