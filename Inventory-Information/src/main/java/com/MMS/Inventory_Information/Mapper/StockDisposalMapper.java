@@ -1,14 +1,13 @@
 package com.MMS.Inventory_Information.Mapper;
 
 import com.MMS.Inventory_Information.dto.request.StockDisposalRequest;
-import com.MMS.Inventory_Information.dto.request.StockDisposalDetailRequest;
 import com.MMS.Inventory_Information.dto.response.StockDisposalResponse;
 import com.MMS.Inventory_Information.dto.response.StockDisposalDetailResponse;
 import com.MMS.Inventory_Information.model.StockDisposal.StockDisposal;
 import com.MMS.Inventory_Information.model.StockDisposal.StockDisposalDetail;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class StockDisposalMapper {
@@ -79,4 +78,34 @@ public class StockDisposalMapper {
 
         return response;
     }
+
+    public static void updateStockDisposal(StockDisposal existing, StockDisposalRequest request, MultipartFile file){
+        existing.setTenantId(request.getTenantId());
+        existing.setStoreId(request.getStoreId());
+        existing.setProcessedById(request.getProcessedById());
+        existing.setProcessedBy(request.getProcessedBy());
+        existing.setDisposalStatus(request.getDisposalStatus());
+        existing.setProposeDate(request.getProposeDate());
+        existing.setApprovedDate(request.getApprovedDate());
+        existing.setProposedOn(request.getProposedOn());
+        existing.setFileName(request.getFileName());
+        existing.setFileType(request.getFileType());
+        existing.setFileData(request.getFileData());
+
+            List<StockDisposalDetail> details = request.getStockDisposalDetails().stream().map(detailRequest -> {
+                StockDisposalDetail detail = new StockDisposalDetail();
+                detail.setItemId(detailRequest.getItemId());
+                detail.setDisposalMethod(detailRequest.getDisposalMethod());
+                detail.setDescription(detailRequest.getDescription());
+                detail.setSellingPrice(detailRequest.getSellingPrice());
+                detail.setExpirationDate(detailRequest.getExpirationDate());
+                detail.setStockDisposal(existing);
+                return detail;
+            }).toList();
+
+            existing.getStockDisposalDetails().clear();
+            existing.getStockDisposalDetails().addAll(details);
+
+
+        }
 }
