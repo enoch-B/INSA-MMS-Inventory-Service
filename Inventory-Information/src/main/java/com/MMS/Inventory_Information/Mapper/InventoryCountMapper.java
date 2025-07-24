@@ -90,6 +90,17 @@ public class InventoryCountMapper {
            entity.setPreparedOn(request.getPreparedOn());
            entity.setCountDate(request.getCountDate());
               // Clear existing details and set new ones
+           List<InventoryDetail> details = request.getInventoryItems().stream().map(itemRequest -> {
+               InventoryDetail detail = new InventoryDetail();
+               detail.setItemId(itemRequest.getItemId());
+               detail.setQuantity(itemRequest.getQuantity());
+               detail.setRemark(itemRequest.getRemark());
+               detail.setInventoryCount(entity);
+               return detail;
+           }).toList();
+
+           entity.getInventoryDetails().clear();
+           entity.getInventoryDetails().addAll(details);
 
        }
 

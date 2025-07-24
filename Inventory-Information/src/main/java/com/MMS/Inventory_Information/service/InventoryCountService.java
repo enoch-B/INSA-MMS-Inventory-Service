@@ -69,17 +69,17 @@ public class InventoryCountService {
         request.setCommitteeName(committeeName);
         request.setCommitteeMembersName(memberNames);
 
-        // ✅ Map DTO to entity
+        //  Map DTO to entity
         InventoryCount inventoryCount = InventoryCountMapper.toEntity(request);
 
-        // ✅ Link each detail to the parent count
+        //  Link each detail to the parent count
         if (inventoryCount.getInventoryDetails() != null) {
             for (InventoryDetail detail : inventoryCount.getInventoryDetails()) {
                 detail.setInventoryCount(inventoryCount);  //  This is CRUCIAL
             }
         }
 
-        // ✅ Save parent and cascade children
+        //  Save parent and cascade children
         InventoryCount savedCount = inventoryCountRepository.save(inventoryCount);
 
         return InventoryCountMapper.toResponse(savedCount);
@@ -95,15 +95,6 @@ public class InventoryCountService {
                 .orElseThrow(() -> new RuntimeException("InventoryCount not found or tenant mismatch"));
 
         return InventoryCountMapper.toResponse(count);
-    }
-
-    /**
-     * Get all inventory counts for a tenant (no pagination).
-     */
-    public List<InventoryCountResponse> getAllInventoryCounts(UUID tenantId) {
-        return inventoryCountRepository.findAllByTenantId(tenantId).stream()
-                .map(InventoryCountMapper::toResponse)
-                .collect(Collectors.toList());
     }
 
     /**
@@ -132,25 +123,16 @@ public class InventoryCountService {
                 .filter(ic -> ic.getTenantId().equals(tenantId))
                 .orElseThrow(() -> new RuntimeException("Inventory Count not found or tenant mismatch"));
         // Update fields from request
+
+     InventoryCountMapper.updateEntity(existingCount,request);
+
         if (!existingCount.getCommitteeId().equals(request.getCommitteeId())) {
             String committeeName = committeeService.getCommitteeNameById(request.getCommitteeId());
             List<String> memberNames = employeeService.getEmployeeNamesByIds(request.getCommitteeMembersId());
             existingCount.setCommitteeName(committeeName);
             existingCount.setCommitteeMembersName(memberNames);
         }
-      inventoryCountDetailRepository.deleteAllByInventoryCountId(existingCount.getId());
 
-        List<InventoryDetail> details = request.getInventoryItems().stream().map(itemRequest -> {
-            InventoryDetail detail = new InventoryDetail();
-            detail.setId(UUID.randomUUID());
-            detail.setItemId(itemRequest.getItemId());
-            detail.setQuantity(itemRequest.getQuantity());
-            detail.setRemark(itemRequest.getRemark());
-            detail.setInventoryCount(existingCount);
-            return detail;
-        }).toList();
-
-        existingCount.setInventoryDetails(details);
 
         InventoryCount updatedCount = inventoryCountRepository.save(existingCount);
 
