@@ -22,6 +22,7 @@ public class DisposableAssetRequest {
       private String processedByName;
       private LocalDate processedOn;
 
+
       private List<DisposableFixedAssetDetail> disposableFixedAssetDetails;
 
 }
