@@ -15,7 +15,7 @@ public class InventoryCountMapper {
 
     public static InventoryCount toEntity(InventoryCountRequest request){
         InventoryCount entity = new InventoryCount();
-         entity.setTenantId(request.getTenantId());
+            entity.setTenantId(request.getTenantId());
             entity.setStoreId(request.getStoreId());
             entity.setInventoryCountNumber(request.getInventoryCountNumber());
             entity.setBudgetYearId(request.getBudgetYearId());
