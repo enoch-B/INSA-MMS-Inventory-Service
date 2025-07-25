@@ -1,12 +1,16 @@
 package com.MMS.Inventory_Information.dto.request;
 
+import lombok.Data;
+
+import java.math.BigDecimal;
 import java.util.UUID;
 
+@Data
 public class InventoryBalanceItemRequest {
     private UUID itemId; // Reference to Item from item-service
     private String itemCode;
-    private int quantity;
-    private int binBalance;
-    private int difference;
+    private BigDecimal quantity;
+    private BigDecimal binBalance;
+    private BigDecimal difference;
     private String remark;
 }

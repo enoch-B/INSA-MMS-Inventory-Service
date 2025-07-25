@@ -64,7 +64,7 @@ public class InventoryBalance {
         }
 
         @OneToMany(mappedBy = "inventoryBalance", cascade = CascadeType.ALL, orphanRemoval = true)
-        private List<InventoryBalanceItem> items;
+        private List<InventoryBalanceItem> inventoryBalanceItem;
 
 
 }

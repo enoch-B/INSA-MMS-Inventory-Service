@@ -3,6 +3,7 @@ package com.MMS.Inventory_Information.model.inventoryBalanceSheet;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -15,16 +16,12 @@ public class InventoryBalanceItem {
         private UUID id;
 
          private UUID itemId;       // Reference to Item from item-service
-         private String itemCode;
-//        private String itemCode;
-//        private String itemName;
-//        private String unitMeasure; // Optional snapshots from item-service
 
-        private Integer quantity;
+        private BigDecimal quantity;
 
-        private Integer binBalance;  // Pulled from Item Service during form generation
+        private BigDecimal binBalance;  // Pulled from Item Service during form generation
 
-        private Integer difference;
+        private BigDecimal difference;
 
         private String remark;
 
