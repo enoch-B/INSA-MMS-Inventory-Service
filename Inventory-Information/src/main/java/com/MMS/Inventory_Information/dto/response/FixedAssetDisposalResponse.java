@@ -17,7 +17,7 @@ public class FixedAssetDisposalResponse {
     private String fixedAssetDisposalNo; // Unique identifier for the disposal
     private String processedBy; // Optional snapshot of the employee who processed the disposal
     private LocalDate approvedDate; // Date when the disposal was approved
-    private DisposalStatus disposalStatus; // e.g. "Pending", "Approved", "Rejected"
+
     private LocalDate processedOn; // Date when the disposal was processed
     private LocalDate proposedDate;
     private String fileName;
@@ -25,6 +25,11 @@ public class FixedAssetDisposalResponse {
     private byte[] fileData; // Binary data of the attached file
     private LocalDate createdAt; // Date when the record was created
     private LocalDate updatedAt; // Date when the record was last updated
+
+    // Values from DisposableAsset
+    private UUID disposableAssetId;
+    private String disposableNo;
+    private DisposalStatus disposalStatus;
 
     private List<FixedAssetDisposalDetailResponse> disposalDetailResponses; // List of details related to the disposal
 

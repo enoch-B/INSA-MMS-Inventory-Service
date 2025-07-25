@@ -21,7 +21,6 @@ public class FixedAssetDisposalMapper {
              entity.setFixedAssetDisposalNo(request.getFixedAssetDisposalNo());
              entity.setProcessedBy(request.getProcessedBy());
              entity.setApprovedDate(request.getApprovedDate());
-             entity.setDisposalStatus(request.getDisposalStatus());
              entity.setProcessedOn(request.getProcessedOn());
              entity.setProposedDate(request.getProposedDate());
 
@@ -54,13 +53,20 @@ public class FixedAssetDisposalMapper {
                      response.setProcessedById(entity.getProcessedById());
                      response.setProcessedBy(entity.getProcessedBy());
                      response.setFixedAssetDisposalNo(entity.getFixedAssetDisposalNo());
-                     response.setDisposalStatus(entity.getDisposalStatus());
                      response.setProcessedOn(entity.getProcessedOn());
                      response.setProposedDate(entity.getProposedDate());
                      response.setApprovedDate(entity.getApprovedDate());
                      response.setFileName(entity.getFileName());
                      response.setFileType(entity.getFileType());
                      response.setFileData(entity.getFileData());
+
+             // Map values from DisposableAsset
+             if (entity.getDisposableAsset() != null) {
+                 response.setDisposableAssetId(entity.getDisposableAsset().getId());
+                 response.setDisposableNo(entity.getDisposableAsset().getDrNo());
+                 response.setDisposalStatus(entity.getDisposableAsset().getDisposalStatus());
+             }
+
               if(entity.getDisposalDetails() != null) {
                   List<FixedAssetDisposalDetailResponse> details = entity.getDisposalDetails().stream().map(detail -> {
                       FixedAssetDisposalDetailResponse detailResponse = new FixedAssetDisposalDetailResponse();
@@ -89,7 +95,6 @@ public class FixedAssetDisposalMapper {
         entity.setProcessedById(request.getProcessedById());
         entity.setProcessedBy(request.getProcessedBy());
         entity.setApprovedDate(request.getApprovedDate());
-        entity.setDisposalStatus(request.getDisposalStatus());
         entity.setProcessedOn(request.getProcessedOn());
         entity.setProposedDate(request.getProposedDate());
 

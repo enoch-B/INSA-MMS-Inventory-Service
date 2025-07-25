@@ -1,10 +1,12 @@
 package com.MMS.Inventory_Information.service;
 
 import com.MMS.Inventory_Information.Mapper.FixedAssetDisposalMapper;
+import com.MMS.Inventory_Information.Repository.DisposableAssetRepository;
 import com.MMS.Inventory_Information.Repository.FixedAssetDisposalDetailRepository;
 import com.MMS.Inventory_Information.Repository.FixedAssetDisposalRepository;
 import com.MMS.Inventory_Information.dto.request.FixedAssetDisposalRequest;
 import com.MMS.Inventory_Information.dto.response.FixedAssetDisposalResponse;
+import com.MMS.Inventory_Information.model.DisposalCollection.DisposableAsset;
 import com.MMS.Inventory_Information.model.FixedAssetDisposal.FixedAssetDisposal;
 import com.MMS.Inventory_Information.model.FixedAssetDisposal.FixedAssetDisposalDetail;
 import jakarta.transaction.Transactional;
@@ -27,6 +29,7 @@ public class FixedAssetDisposalService {
 
       private final FixedAssetDisposalRepository fixedAssetDisposalRepository;
       private final FixedAssetDisposalDetailRepository fixedAssetDisposalDetailRepository;
+      private final DisposableAssetRepository disposableAssetRepository;
 
     public String generateFA_DisposalNumber(UUID tenantId) {
         int currentYear = LocalDate.now().getYear();
@@ -51,6 +54,12 @@ public class FixedAssetDisposalService {
         // Set the generated disposal number and tenant id
         request.setTenantId(tenantId);
         request.setFixedAssetDisposalNo(disposalNo);
+
+        // Retrieve disposal status from referenced DisposableAsset
+        DisposableAsset disposableAsset = disposableAssetRepository.findById(request.getDisposableAssetId())
+                .orElseThrow(() -> new RuntimeException("DisposableAsset not found with id: " + request.getDisposableAssetId()));
+        request.setDisposalStatus(disposableAsset.getDisposalStatus());
+
         // Map Dto to entity
         FixedAssetDisposal fixedAssetDisposal = FixedAssetDisposalMapper.toEntity(request);
 
@@ -110,6 +119,11 @@ public class FixedAssetDisposalService {
                 .findById(id)
                 .filter(disposal -> disposal.getTenantId().equals(tenantId))
                 .orElseThrow(() -> new RuntimeException("Fixed Asset Disposal not found with id: " + id));
+
+        // Update status from DisposableAsset reference
+        DisposableAsset disposableAsset = disposableAssetRepository.findById(request.getDisposableAssetId())
+                .orElseThrow(() -> new RuntimeException("DisposableAsset not found with id: " + request.getDisposableAssetId()));
+        request.setDisposalStatus(disposableAsset.getDisposalStatus());
 
         // Update the mutable fields
         FixedAssetDisposalMapper.updateEntity(existingDisposal, request);

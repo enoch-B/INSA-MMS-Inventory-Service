@@ -21,6 +21,8 @@ public class FixedAssetDisposalRequest {
         private LocalDate processedOn; // Date when the disposal was processed
         private LocalDate proposedDate;
 
+        private UUID disposableAssetId;
+
         private List<FixedAssetDisposalDetailRequest> disposalDetails; // List of details related to the disposal
 
 
