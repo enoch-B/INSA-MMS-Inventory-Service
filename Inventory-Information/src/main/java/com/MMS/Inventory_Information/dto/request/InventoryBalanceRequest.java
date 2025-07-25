@@ -24,5 +24,5 @@ public class InventoryBalanceRequest {
     private UUID inventoryCountId;
     private StoreType storeType;
 
-    private List<InventoryBalanceItemRequest> items;
+    private List<InventoryBalanceItemRequest> inventoryBalanceItemRequest;
 }

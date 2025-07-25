@@ -1,16 +1,22 @@
 package com.MMS.Inventory_Information.service;
 
 
+import com.MMS.Inventory_Information.Mapper.InventoryBalanceMapper;
 import com.MMS.Inventory_Information.Repository.InventoryBalanceItemRepository;
 import com.MMS.Inventory_Information.Repository.InventoryBalanceRepository;
 import com.MMS.Inventory_Information.Repository.InventoryCountDetailRepository;
 import com.MMS.Inventory_Information.Repository.InventoryCountRepository;
 import com.MMS.Inventory_Information.dto.request.InventoryBalanceRequest;
+import com.MMS.Inventory_Information.dto.response.InventoryBalanceResponse;
 import com.MMS.Inventory_Information.model.InventoryCountSheet.InventoryCount;
 import com.MMS.Inventory_Information.model.InventoryCountSheet.InventoryDetail;
 import com.MMS.Inventory_Information.model.inventoryBalanceSheet.InventoryBalance;
 import com.MMS.Inventory_Information.model.inventoryBalanceSheet.InventoryBalanceItem;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -25,35 +31,40 @@ public class InventoryBalanceService {
     public final InventoryBalanceItemRepository inventoryBalanceItemRepository;
 
 
-    public void createInventoryBalance(UUID tenantId, InventoryBalanceRequest request) {
+    public InventoryBalanceResponse createInventoryBalance(UUID tenantId, InventoryBalanceRequest request) {
 
         InventoryCount inventoryCount = inventoryCountRepository.findById(request.getInventoryCountId())
                 .orElseThrow(() -> new RuntimeException("Inventory Count not found"));
 
-        // Create and populate the InventoryBalance entity
-        InventoryBalance inventoryBalance = new InventoryBalance();
-        inventoryBalance.setId(UUID.randomUUID());
-        inventoryBalance.setTenantId(tenantId);
-        inventoryBalance.setInventoryCount(inventoryCount);
-        inventoryBalance.setPreparedById(request.getPreparedById());
-        inventoryBalance.setStoreType(request.getStoreType());
-        inventoryBalance.setPreparedBy(request.getPreparedBy());
-        inventoryBalance.setPreparedOn(request.getPreparedOn());
+        InventoryBalance balance = InventoryBalanceMapper.mapToEntity(request,inventoryCount);
+        InventoryBalance saved = inventoryBalanceRepository.save(balance);
 
-        // Save InventoryBalance first (parent)
-        inventoryBalanceRepository.save(inventoryBalance);
-
-        // Copy inventory details from InventoryCount to InventoryBalanceItems
-        for (InventoryDetail detail : inventoryCountDetailRepository.findAllByInventoryCountId(inventoryCount.getId())) {
-            InventoryBalanceItem balanceItem = new InventoryBalanceItem();
-            balanceItem.setId(UUID.randomUUID());
-            balanceItem.setItemId(detail.getItemId()); // Reference to Item from item-service
-            balanceItem.setQuantity(detail.getQuantity());
-            balanceItem.setRemark(detail.getRemark());
-            balanceItem.setInventoryBalance(inventoryBalance); // set relationship
-
-            // Save child items
-            inventoryBalanceItemRepository.save(balanceItem);
+        return InventoryBalanceMapper.mapToResponse(saved);
         }
+
+
+    public Page<InventoryBalanceResponse> getAllInventoryBalance(UUID tenantId, int page, int size) {
+            Pageable pageable=PageRequest.of(page,size, Sort.by("createdAt").descending());
+
+            return inventoryBalanceRepository.findByTenantId(tenantId,pageable)
+                    .map(InventoryBalanceMapper::mapToResponse);
+
+    }
+
+    public InventoryBalanceResponse getInventoryBalanceById(UUID tenantId, UUID id) {
+        InventoryBalance inventoryBalance=inventoryBalanceRepository.findById(id)
+                .filter(ib->ib.getTenantId().equals(tenantId))
+                .orElseThrow(()->new RuntimeException("Item Not Found Or Tenant Mismatch" +id));
+
+        return  InventoryBalanceMapper.mapToResponse(inventoryBalance);
+    }
+
+    public void deleteInventoryBalance(UUID tenantId, UUID id) {
+        InventoryBalance inventoryBalance=inventoryBalanceRepository.findById(id)
+                .filter(ib->ib.getTenantId().equals(tenantId))
+                .orElseThrow(()->new RuntimeException("Item Not Found Or Tenant Mismatch"));
+
+        inventoryBalanceRepository.delete(inventoryBalance);
     }
 }
+
