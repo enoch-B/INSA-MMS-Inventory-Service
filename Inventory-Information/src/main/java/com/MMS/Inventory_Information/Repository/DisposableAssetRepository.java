@@ -16,7 +16,7 @@ public interface DisposableAssetRepository extends JpaRepository<DisposableAsset
     @Query("SELECT da.drNo FROM DisposableAsset da " +
             "WHERE da.tenantId = :tenantId AND FUNCTION('YEAR', da.createdAt) = :currentYear " +
             "ORDER BY da.createdAt DESC")
-    List<String> findRecentFADNumbers(UUID tenantId, @Param("year") int currentYear);
+    List<String> findRecentFADNumbers(UUID tenantId, @Param("currentYear") int currentYear);
 
     Page<DisposableAsset> findByTenantId(UUID tenantId, Pageable pageable);
 }

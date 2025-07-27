@@ -5,6 +5,7 @@ import com.MMS.Inventory_Information.dto.request.DisposableAssetRequest;
 import com.MMS.Inventory_Information.dto.response.DisposableAssetResponse;
 import com.MMS.Inventory_Information.model.DisposalCollection.DisposableAsset;
 import com.MMS.Inventory_Information.service.DisposableAssetService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class DisposableAssetController {
 
     // POST request
     @PostMapping("{tenantId}/add")
-    public ResponseEntity<DisposableAssetResponse> addDisposalCollection(@PathVariable UUID tenantId, @RequestBody DisposableAssetRequest disposableAssetRequest) {
+    public ResponseEntity<DisposableAssetResponse> addDisposalCollection(@PathVariable UUID tenantId, @RequestBody @Valid DisposableAssetRequest disposableAssetRequest) {
         DisposableAssetResponse response = disposableAssetService.addDisposalCollection(tenantId,disposableAssetRequest);
 
         return ResponseEntity.ok(response);
@@ -50,7 +51,7 @@ public class DisposableAssetController {
     }
 
     @PutMapping("/{tenantId}/update/{id}")
-    public ResponseEntity<DisposableAssetResponse> updateDisposableAsset(@PathVariable UUID tenantId, @PathVariable UUID id, @RequestBody DisposableAssetRequest disposableAssetRequest) {
+    public ResponseEntity<DisposableAssetResponse> updateDisposableAsset(@PathVariable UUID tenantId, @PathVariable UUID id, @RequestBody @Valid DisposableAssetRequest disposableAssetRequest) {
         DisposableAssetResponse response = disposableAssetService.updateDisposableAsset(tenantId, id, disposableAssetRequest);
         return ResponseEntity.ok(response);
     }
