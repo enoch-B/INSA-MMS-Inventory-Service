@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +17,7 @@ public interface FixedAssetDisposalRepository extends JpaRepository<FixedAssetDi
             "WHERE t.tenantId = :tenantId " +
             "AND EXTRACT(YEAR FROM t.createdAt) = :year " +
             "ORDER BY t.createdAt DESC")
-    List<String> findRecentDisposalNumbers(UUID tenantId, int currentYear);
+    List<String> findRecentDisposalNumbers(UUID tenantId, @Param("year")int currentYear);
 
 
     Optional<FixedAssetDisposal> findByTenantIdAndFixedAssetDisposalNo(UUID tenantId, String disposalNumber);

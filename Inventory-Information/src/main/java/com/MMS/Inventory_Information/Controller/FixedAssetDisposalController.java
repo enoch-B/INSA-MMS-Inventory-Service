@@ -3,6 +3,7 @@ package com.MMS.Inventory_Information.Controller;
 import com.MMS.Inventory_Information.dto.request.FixedAssetDisposalRequest;
 import com.MMS.Inventory_Information.dto.response.FixedAssetDisposalResponse;
 import com.MMS.Inventory_Information.service.FixedAssetDisposalService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +28,7 @@ public class FixedAssetDisposalController {
     @ResponseStatus(HttpStatus.CREATED)
     public FixedAssetDisposalResponse addFixedAssetDisposal(
             @PathVariable UUID tenantId,
-            @RequestPart("request") FixedAssetDisposalRequest request,
+            @RequestPart("request") @Valid FixedAssetDisposalRequest request,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
         return fixedAssetDisposalService.addFixedAssetDisposal(tenantId, request, file);
@@ -39,7 +40,7 @@ public class FixedAssetDisposalController {
     public ResponseEntity<?> updateFixedAssetDisposal(
             @PathVariable UUID tenantId,
             @PathVariable UUID id,
-            @RequestPart("request") FixedAssetDisposalRequest request,
+            @RequestPart("request") @Valid FixedAssetDisposalRequest request,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
         FixedAssetDisposalResponse response= fixedAssetDisposalService.updateFixedAssetDisposal(tenantId, id, request, file);

@@ -24,6 +24,8 @@ public class FixedAssetDisposalMapper {
              entity.setProcessedOn(request.getProcessedOn());
              entity.setProposedDate(request.getProposedDate());
 
+
+
              if (request.getDisposalDetails() != null) {
                  List<FixedAssetDisposalDetail> details = request.getDisposalDetails().stream().map(detailRequest -> {
                      FixedAssetDisposalDetail detail = new FixedAssetDisposalDetail();

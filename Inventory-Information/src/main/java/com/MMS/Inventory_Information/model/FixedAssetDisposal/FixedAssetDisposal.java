@@ -40,8 +40,14 @@ public class FixedAssetDisposal {
     @Column(nullable = false, updatable = false)
     private LocalDate proposedDate;
 
+    @Column(name = "disposal_status")
+    private DisposalStatus disposalStatus;
+
+
     private String fileName;
     private String fileType;
+
+    @Lob
     private byte[] fileData;
 
     @CreatedDate

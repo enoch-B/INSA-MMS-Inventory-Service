@@ -6,6 +6,7 @@ import com.MMS.Inventory_Information.Repository.FixedAssetDisposalDetailReposito
 import com.MMS.Inventory_Information.Repository.FixedAssetDisposalRepository;
 import com.MMS.Inventory_Information.dto.request.FixedAssetDisposalRequest;
 import com.MMS.Inventory_Information.dto.response.FixedAssetDisposalResponse;
+import com.MMS.Inventory_Information.enums.DisposalStatus;
 import com.MMS.Inventory_Information.model.DisposalCollection.DisposableAsset;
 import com.MMS.Inventory_Information.model.FixedAssetDisposal.FixedAssetDisposal;
 import com.MMS.Inventory_Information.model.FixedAssetDisposal.FixedAssetDisposalDetail;
@@ -49,8 +50,9 @@ public class FixedAssetDisposalService {
     }
 
     public FixedAssetDisposalResponse addFixedAssetDisposal(UUID tenantId, FixedAssetDisposalRequest request, MultipartFile file) {
-        //Generate Disposal Number
+        // Generate Disposal Number
         String disposalNo = generateFA_DisposalNumber(tenantId);
+
         // Set the generated disposal number and tenant id
         request.setTenantId(tenantId);
         request.setFixedAssetDisposalNo(disposalNo);
@@ -58,12 +60,18 @@ public class FixedAssetDisposalService {
         // Retrieve disposal status from referenced DisposableAsset
         DisposableAsset disposableAsset = disposableAssetRepository.findById(request.getDisposableAssetId())
                 .orElseThrow(() -> new RuntimeException("DisposableAsset not found with id: " + request.getDisposableAssetId()));
-        request.setDisposalStatus(disposableAsset.getDisposalStatus());
+
+        //  Set default value if the disposableAsset's status is null
+        DisposalStatus status = disposableAsset.getDisposalStatus() != null ? disposableAsset.getDisposalStatus() : DisposalStatus.ON_HOLD;
+        request.setDisposalStatus(status);
 
         // Map Dto to entity
         FixedAssetDisposal fixedAssetDisposal = FixedAssetDisposalMapper.toEntity(request);
 
-        // Handle the file here
+        // Set the entity relationship manually
+        fixedAssetDisposal.setDisposableAsset(disposableAsset);
+
+        // Handle the file
         try {
             if (file != null && !file.isEmpty()) {
                 fixedAssetDisposal.setFileName(file.getOriginalFilename());
@@ -73,13 +81,14 @@ public class FixedAssetDisposalService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to read file", e);
         }
-        // Save the entity to the repository
 
+        // Save the entity to the repository
         FixedAssetDisposal savedEntity = fixedAssetDisposalRepository.save(fixedAssetDisposal);
+
         // Return the response DTO
         return FixedAssetDisposalMapper.toResponse(savedEntity);
-
     }
+
 
     /*
     * get all paginated fixed asset disposal
