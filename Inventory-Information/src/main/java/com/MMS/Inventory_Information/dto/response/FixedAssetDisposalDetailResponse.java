@@ -16,6 +16,5 @@ public class FixedAssetDisposalDetailResponse {
 
     private String itemLocation;
     private String disposalMethod; // e.g., "Sale", "Donation", "Scrap"
-    private String description; // Optional, for additional context
 
 }

@@ -1,5 +1,6 @@
 package com.MMS.Inventory_Information.dto.request;
 
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.util.UUID;
@@ -7,11 +8,17 @@ import java.util.UUID;
 @Data
 public class LostStockItemDetailRequest {
 
-    private UUID itemId;        // FK to item-service
+    @NotNull(message = "Item ID is required")
+    private UUID itemId;
 
-    private Integer Quantity;
+    @NotNull(message = "Quantity is required")
+    @Min(value = 1, message = "Quantity must be at least 1")
+    private Integer quantity;
 
     private String description;
+
+    @NotBlank(message = "Duration is required")
     private String duration;
-    private String remark;
+
+    private String remark; // optional
 }

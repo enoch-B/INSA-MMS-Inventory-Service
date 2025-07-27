@@ -1,7 +1,6 @@
 package com.MMS.Inventory_Information.dto.request;
 
-
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -11,12 +10,15 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-@Valid
 @Getter
 @Setter
 public class InventoryCountDetailRequest {
-    private UUID itemId;  // From item-service
-    private int quantity;
-    private String remark;
 
+    @NotNull(message = "Item ID is required")
+    private UUID itemId;
+
+    @Min(value = 1, message = "Quantity must be at least 1")
+    private int quantity;
+
+    private String remark;
 }
