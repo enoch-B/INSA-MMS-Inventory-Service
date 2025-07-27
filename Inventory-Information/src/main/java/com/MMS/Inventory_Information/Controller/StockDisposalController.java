@@ -4,6 +4,7 @@ import com.MMS.Inventory_Information.dto.request.StockDisposalRequest;
 import com.MMS.Inventory_Information.dto.response.StockDisposalResponse;
 import com.MMS.Inventory_Information.model.StockDisposal.StockDisposal;
 import com.MMS.Inventory_Information.service.StockDisposalService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -22,7 +23,7 @@ public class StockDisposalController {
 
     // Create a new Stock Disposal
     @PostMapping(value= "{tenantId}/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<StockDisposalResponse> addStockDisposal(@PathVariable UUID tenantId, @RequestPart(value = "request") StockDisposalRequest request,
+    public ResponseEntity<StockDisposalResponse> addStockDisposal(@PathVariable UUID tenantId, @RequestPart(value = "request") @Valid StockDisposalRequest request,
                                                                   @RequestPart(value = "file")MultipartFile file) {
         StockDisposalResponse response = stockDisposalService.addStockDisposal(tenantId,request,file);
         return ResponseEntity.ok(response);

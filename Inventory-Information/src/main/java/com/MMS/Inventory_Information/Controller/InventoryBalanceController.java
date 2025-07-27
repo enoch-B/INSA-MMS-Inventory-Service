@@ -5,6 +5,7 @@ import com.MMS.Inventory_Information.dto.request.InventoryBalanceRequest;
 import com.MMS.Inventory_Information.dto.response.InventoryBalanceResponse;
 import com.MMS.Inventory_Information.service.InventoryBalanceService;
 import feign.Response;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class InventoryBalanceController {
 
     // Define endpoints for inventory balance operations here
     @PostMapping("/{tenantId}/add")
-    public ResponseEntity<?> createInventoryBalance(@PathVariable UUID tenantId, @RequestBody InventoryBalanceRequest inventoryBalanceRequest){
+    public ResponseEntity<?> createInventoryBalance(@PathVariable UUID tenantId, @RequestBody @Valid InventoryBalanceRequest inventoryBalanceRequest){
        InventoryBalanceResponse response= inventoryBalanceService.createInventoryBalance(tenantId, inventoryBalanceRequest);
         return ResponseEntity.ok(response);
     }

@@ -6,6 +6,7 @@ import com.MMS.Inventory_Information.dto.response.FixedAssetTransferResponse;
 import com.MMS.Inventory_Information.dto.response.LostFixedAssetResponse;
 import com.MMS.Inventory_Information.model.LostFixedAsset.LostFixedAsset;
 import com.MMS.Inventory_Information.service.LostFixedAssetService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class LostFixedAssetController {
 
     @PostMapping("/{tenantId}/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public LostFixedAssetResponse addLostFixedAsset(@PathVariable UUID tenantId, @RequestBody LostFixedAssetRequest lostFixedAssetRequest) {
+    public LostFixedAssetResponse addLostFixedAsset(@PathVariable UUID tenantId, @RequestBody @Valid LostFixedAssetRequest lostFixedAssetRequest) {
         // logic for adding lost fixed asset
        return  lostFixedAssetService.addLostFixedAsset(tenantId, lostFixedAssetRequest);
 
@@ -57,7 +58,7 @@ public class LostFixedAssetController {
     */
 
     @PutMapping("/{tenantId}/update/{id}")
-    public ResponseEntity<?>  updateLostFixedAsset(@PathVariable UUID tenantId, @PathVariable UUID id,@RequestBody LostFixedAssetRequest request){
+    public ResponseEntity<?>  updateLostFixedAsset(@PathVariable UUID tenantId, @PathVariable UUID id,@RequestBody @Valid LostFixedAssetRequest request){
         LostFixedAsset updated = lostFixedAssetService.updateLostFixedAsset(tenantId,id,request);
 
         return ResponseEntity.ok(updated);

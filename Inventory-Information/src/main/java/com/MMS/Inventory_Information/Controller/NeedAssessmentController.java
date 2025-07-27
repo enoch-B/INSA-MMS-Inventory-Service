@@ -6,6 +6,7 @@ import com.MMS.Inventory_Information.dto.response.NeedAssessmentResponse;
 import com.MMS.Inventory_Information.model.NeedAssessment.NeedAssessment;
 import com.MMS.Inventory_Information.service.NeedAssessmentService;
 import feign.Response;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class NeedAssessmentController {
     private final NeedAssessmentService needAssessmentService;
 
     @PostMapping("/{tenantId}/add")
-    public ResponseEntity<NeedAssessmentResponse> addNeedAssessment(@PathVariable UUID tenantId, @RequestBody NeedAssessmentRequest needAssessmentRequest) {
+    public ResponseEntity<NeedAssessmentResponse> addNeedAssessment(@PathVariable UUID tenantId, @RequestBody @Valid NeedAssessmentRequest needAssessmentRequest) {
         //set tenant id
 
         NeedAssessmentResponse response = needAssessmentService.addNeedAssessment(tenantId, needAssessmentRequest);
@@ -64,7 +65,7 @@ public class NeedAssessmentController {
       */
     @PutMapping("/{tenantId}/update/{id}")
     public ResponseEntity<?> updateNeedAssessment(@PathVariable UUID tenantId, @PathVariable UUID id,
-                                                  @RequestBody NeedAssessmentRequest request ){
+                                                  @RequestBody @Valid NeedAssessmentRequest request ){
         NeedAssessmentResponse updated= needAssessmentService.updateNeedAssessment(tenantId,id,request);
 
         return ResponseEntity.ok(updated);

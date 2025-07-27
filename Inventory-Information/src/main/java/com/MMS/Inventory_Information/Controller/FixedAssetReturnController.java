@@ -3,6 +3,7 @@ package com.MMS.Inventory_Information.Controller;
 import com.MMS.Inventory_Information.dto.request.FixedAssetReturnRequest;
 import com.MMS.Inventory_Information.dto.response.FixedAssetReturnResponse;
 import com.MMS.Inventory_Information.service.FixedAssetReturnService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class FixedAssetReturnController {
     @PostMapping("/{tenantId}/add")
     public FixedAssetReturnResponse addFixedAssetReturn(
             @PathVariable UUID tenantId,
-            @RequestBody FixedAssetReturnRequest request) {
+            @RequestBody @Valid FixedAssetReturnRequest request) {
         return fixedAssetReturnService.addFixedAssetReturn(tenantId, request);
     }
 
@@ -53,7 +54,7 @@ public class FixedAssetReturnController {
     public ResponseEntity<FixedAssetReturnResponse> updateFixedAssetReturn(
             @PathVariable UUID tenantId,
             @PathVariable UUID id,
-            @RequestBody FixedAssetReturnRequest request) {
+            @RequestBody @Valid FixedAssetReturnRequest request) {
         FixedAssetReturnResponse response = fixedAssetReturnService.updateFixedAssetReturn(tenantId, id, request);
         return ResponseEntity.ok(response);
     }

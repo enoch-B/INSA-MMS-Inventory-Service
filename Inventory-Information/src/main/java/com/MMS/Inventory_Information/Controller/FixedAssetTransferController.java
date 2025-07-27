@@ -3,6 +3,7 @@ package com.MMS.Inventory_Information.Controller;
 import com.MMS.Inventory_Information.dto.request.FixedAssetTransferRequest;
 import com.MMS.Inventory_Information.dto.response.FixedAssetTransferResponse;
 import com.MMS.Inventory_Information.service.FixedAssetTransferService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class FixedAssetTransferController {
     // Define endpoints for Fixed Asset Transfer operations here
 
     @PostMapping("/{tenantId}/add")
-  public FixedAssetTransferResponse addFixedAssetTransfer(@PathVariable UUID tenantId, @RequestBody FixedAssetTransferRequest fixedAssetTransferRequest){
+  public FixedAssetTransferResponse addFixedAssetTransfer(@PathVariable UUID tenantId, @RequestBody @Valid FixedAssetTransferRequest fixedAssetTransferRequest){
 
         return fixedAssetTransferService.addFixedAssetTransfer(tenantId, fixedAssetTransferRequest);
     }
@@ -51,7 +52,7 @@ public class FixedAssetTransferController {
 
     @PutMapping("/{tenantId}/update/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public FixedAssetTransferResponse updateFixedAssetTransfer(@PathVariable UUID tenantId, @PathVariable UUID id, @RequestBody FixedAssetTransferRequest request) {
+    public FixedAssetTransferResponse updateFixedAssetTransfer(@PathVariable UUID tenantId, @PathVariable UUID id, @RequestBody @Valid FixedAssetTransferRequest request) {
         // logic for updating a fixed asset transfer
         return fixedAssetTransferService.updateFixedAssetTransfer(tenantId, id, request);
     }

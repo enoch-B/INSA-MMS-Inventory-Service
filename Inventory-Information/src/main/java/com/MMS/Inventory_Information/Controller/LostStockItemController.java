@@ -6,6 +6,7 @@ import com.MMS.Inventory_Information.dto.request.LostStockItemRequest;
 import com.MMS.Inventory_Information.dto.response.LostStockItemResponse;
 import com.MMS.Inventory_Information.model.LostStockItem.LostStockItem;
 import com.MMS.Inventory_Information.service.LostStockItemService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -22,7 +23,7 @@ public class LostStockItemController {
     private final LostStockItemService lostStockItemService;
 
     @PostMapping(value="/{tenantId}/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LostStockItemResponse> addLostStockItem(@PathVariable UUID tenantId,  @RequestPart("request") LostStockItemRequest request,
+    public ResponseEntity<LostStockItemResponse> addLostStockItem(@PathVariable UUID tenantId,  @RequestPart("request") @Valid LostStockItemRequest request,
                                                                   @RequestPart(value = "file", required = false) MultipartFile file){
 
         LostStockItemResponse response= lostStockItemService.addLostStockItem(tenantId,request,file);
@@ -67,7 +68,7 @@ public class LostStockItemController {
     public ResponseEntity<?> updateLostStockItem(
             @PathVariable UUID tenantId,
             @PathVariable UUID id,
-            @RequestPart("request") LostStockItemRequest request,
+            @RequestPart("request") @Valid LostStockItemRequest request,
             @RequestPart(value = "file", required = false) MultipartFile file) {
 
         LostStockItem updated = lostStockItemService.updateLostStockItem(tenantId,id, request, file);

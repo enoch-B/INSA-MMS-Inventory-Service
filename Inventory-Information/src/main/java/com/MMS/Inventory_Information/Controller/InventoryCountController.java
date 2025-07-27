@@ -3,6 +3,7 @@ package com.MMS.Inventory_Information.Controller;
 import com.MMS.Inventory_Information.dto.request.InventoryCountRequest;
 import com.MMS.Inventory_Information.dto.response.InventoryCountResponse;
 import com.MMS.Inventory_Information.service.InventoryCountService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class InventoryCountController {
     @PostMapping("{tenantId}/add")
     @ResponseStatus(HttpStatus.CREATED)
     public InventoryCountResponse createInventoryCount(@PathVariable UUID tenantId,
-                                                       @RequestBody InventoryCountRequest inventoryCountRequest) {
+                                                       @RequestBody @Valid InventoryCountRequest inventoryCountRequest) {
       return  inventoryCountService.createInventoryCount(tenantId, inventoryCountRequest);
 
     }
@@ -49,7 +50,7 @@ public class InventoryCountController {
     public ResponseEntity<InventoryCountResponse> updateInventoryCount(
             @PathVariable UUID tenantId,
             @PathVariable UUID id,
-            @RequestBody InventoryCountRequest inventoryCountRequest) {
+            @RequestBody @Valid InventoryCountRequest inventoryCountRequest) {
         InventoryCountResponse response = inventoryCountService.updateInventoryCount(tenantId, id, inventoryCountRequest);
         return ResponseEntity.ok(response);
     }
