@@ -23,4 +23,6 @@ public class FixedAssetReturnDetailRequest {
     @NotBlank(message = "Tag number is required")
     private String tagNumber;
 
+    private String description;
+
 }
